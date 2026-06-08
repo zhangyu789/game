@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #94a3b8 transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: #94a3b8;
+    border-radius: 3px;
+  }
+  .dark *::-webkit-scrollbar-thumb {
+    background-color: #475569;
+  }
+}
+
+@layer components {
+  .tool-card {
+    @apply bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 p-6;
+  }
+  .btn-primary {
+    @apply px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply px-4 py-2 bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-200 rounded-lg font-medium transition-colors duration-200;
+  }
+  .btn-sm {
+    @apply px-2.5 py-1.5 text-sm;
+  }
+  .input-field {
+    @apply w-full px-3 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200;
+  }
+  .textarea-field {
+    @apply input-field font-mono text-sm resize-y;
+  }
+  .tool-header {
+    @apply text-xl font-bold text-gray-900 dark:text-white mb-4;
+  }
+  .toast-enter-active {
+    animation: toast-in 0.3s ease-out;
+  }
+  .toast-leave-active {
+    animation: toast-in 0.3s ease-in reverse;
+  }
+  @keyframes toast-in {
+    from {
+      transform: translateY(-10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
