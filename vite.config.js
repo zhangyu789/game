@@ -10,9 +10,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
-        name: 'DevPocket - 开发者工具箱',
-        short_name: 'DevPocket',
-        description: '纯前端开发者效率工具箱',
+        name: 'GameBox - 经典网页游戏合集',
+        short_name: 'GameBox',
+        description: '纯前端经典单机游戏合集',
         theme_color: '#6366f1',
         background_color: '#0f172a',
         display: 'standalone',

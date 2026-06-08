@@ -11,9 +11,9 @@
       <!-- Logo -->
       <div class="flex items-center h-14 px-4 border-b border-gray-200 dark:border-slate-700 shrink-0">
         <div class="flex items-center gap-2 overflow-hidden">
-          <span class="text-2xl shrink-0">🛠️</span>
+          <span class="text-2xl shrink-0">🎮</span>
           <transition name="fade">
-            <span v-if="sidebarOpen" class="font-bold text-lg whitespace-nowrap text-primary-500">DevPocket</span>
+            <span v-if="sidebarOpen" class="font-bold text-lg whitespace-nowrap text-primary-500">GameBox</span>
           </transition>
         </div>
       </div>
@@ -86,7 +86,7 @@
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
-          <span class="hidden sm:inline">搜索工具</span>
+          <span class="hidden sm:inline">搜索游戏</span>
           <kbd class="hidden sm:inline text-xs bg-gray-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">Ctrl+K</kbd>
         </button>
         <!-- Mobile dark toggle -->
@@ -118,7 +118,7 @@
               ref="searchInput"
               v-model="searchQuery"
               type="text"
-              placeholder="搜索工具..."
+              placeholder="搜索游戏..."
               class="flex-1 px-3 py-3 bg-transparent text-gray-900 dark:text-gray-100 outline-none"
               @keydown.esc="showSearch = false"
               @keydown.enter="goToFirstResult"
@@ -136,7 +136,7 @@
               <span class="text-sm text-gray-700 dark:text-gray-300">{{ tool.meta.title }}</span>
             </router-link>
             <div v-if="filteredTools.length === 0" class="px-3 py-4 text-center text-gray-400 text-sm">
-              未找到匹配的工具
+              未找到匹配的游戏
             </div>
           </div>
         </div>
@@ -183,7 +183,7 @@ const searchQuery = ref('')
 const searchInput = ref(null)
 
 const currentTitle = computed(() => {
-  return route.meta?.title || 'DevPocket'
+  return route.meta?.title || 'GameBox'
 })
 
 function getGroupTools(groupKey) {
