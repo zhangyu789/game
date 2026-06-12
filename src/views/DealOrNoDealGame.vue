@@ -1,77 +1,81 @@
 <template>
-  <div class="game-container" :class="{'red-alert': redAlertLevel > 0, 'red-alert-level-3': redAlertLevel >= 3}">
-    
-    <!-- 赛博朋克背景 -->
-    <div class="cyber-background" :style="cyberBgStyle">
-      <div class="cyber-grid"></div>
-      <div class="cyber-scanlines"></div>
-      <div class="cyber-glow"></div>
-    </div>
-    
-    <!-- 红色警戒效果层 -->
-    <div v-if="redAlertLevel > 0" class="red-alert-overlay" :class="'level-' + redAlertLevel"></div>
-    
-    <!-- 【深渊协议】新手引导开场 -->
-    <div v-if="gameState === 'TUTORIAL'" class="tutorial-overlay">
-      <div class="tutorial-terminal">
-        <div class="terminal-header">
-          <span class="terminal-title">ABYSS CAPITAL - LIQUIDATION PROTOCOL</span>
-          <span class="terminal-status">ONLINE</span>
-        </div>
-        <div class="terminal-content">
-          <div v-for="(line, index) in terminalLines" :key="index" 
-            class="terminal-line" :class="{ 'system-line': line.isSystem }">
-            <span v-if="!line.complete">></span>
-            {{ line.text }}
-            <span v-if="!line.complete" class="cursor">_</span>
-          </div>
-        </div>
-        <div class="terminal-loading">
-          <div class="loading-bar"></div>
+    <div class="game-container" :class="{ 'red-alert': redAlertLevel > 0, 'red-alert-level-3': redAlertLevel >= 3 }"> 
+
+  <!-- 赛博朋克背景 -->
+  <div class="cyber-background" :style="cyberBgStyle">
+    <div class="cyber-grid"></div>
+    <div class="cyber-scanlines"></div>
+    <div class="cyber-glow"></div>
+  </div>
+
+  <!-- 红色警戒效果层 -->
+  <div v-if="redAlertLevel > 0" class="red-alert-overlay" :class="'level-' + redAlertLevel"></div>
+
+  <!-- 【深渊协议】新手引导开场 -->
+  <div v-if="gameState === 'TUTORIAL'" class="tutorial-overlay">
+    <div class="tutorial-terminal">
+      <div class="terminal-header">
+        <span class="terminal-title">ABYSS CAPITAL - LIQUIDATION PROTOCOL</span>
+        <span class="terminal-status">ONLINE</span>
+      </div>
+      <div class="terminal-content">
+        <div v-for="(line, index) in terminalLines" :key="index" class="terminal-line"
+          :class="{ 'system-line': line.isSystem }">
+          <span v-if="!line.complete">></span>
+          {{ line.text }}
+          <span v-if="!line.complete" class="cursor">_</span>
         </div>
       </div>
-      
-      <!-- AI 阿特拉斯形象 -->
-      <div class="atlas-container">
-        <div class="atlas-image-wrapper">
-          <img :src="atlasAiImg" alt="AI Atlas" class="atlas-image" />
-          <div class="atlas-overlay"></div>
-        </div>
-        <div class="atlas-eyes-glow"></div>
+      <div class="terminal-loading">
+        <div class="loading-bar"></div>
       </div>
     </div>
-    
-    <!-- 主内容区域 -->
-    <div class="tool-card dond-main-panel max-w-6xl mx-auto select-none" :style="atmosphereStyle" :class="{'warm-filter': warmFilterActive, 'hope-flash': hopeFlashActive}">
-      
-      <!-- 债务警告倒计时（图五风格） -->
-      <div v-if="abyssProtocolActive && debt > 0" class="debt-warning-panel">
-        <div class="debt-counter">
-          <span class="debt-label">DEBT</span>
-          <span class="debt-value">£{{ formatNum(debt) }}</span>
-          <span class="debt-interest-rate">+{{ (interestRate * debtMultiplier * 100).toFixed(0) }}%</span>
-        </div>
-        <div class="survival-gauge">
-          <div class="gauge-label">SURVIVAL</div>
-          <div class="gauge-bar">
-            <div class="gauge-fill" :style="{ width: survivalPoints + '%' }" :class="survivalGaugeClass"></div>
-          </div>
-          <div class="gauge-value">{{ Math.round(survivalPoints) }}%</div>
-        </div>
+
+    <!-- AI 阿特拉斯形象 -->
+    <div class="atlas-container">
+      <div class="atlas-image-wrapper">
+        <img :src="atlasAiImg" alt="AI Atlas" class="atlas-image" />
+        <div class="atlas-overlay"></div>
       </div>
+      <div class="atlas-eyes-glow"></div>
+    </div>
+  </div>
 
-      <h2 class="tool-header cyber-title">💰 一掷千金：秘密金库</h2>
+  <!-- 主内容区域 -->
+  <div class="tool-card dond-main-panel max-w-6xl mx-auto select-none" :style="atmosphereStyle"
+    :class="{ 'warm-filter': warmFilterActive, 'hope-flash': hopeFlashActive }">
 
-      <!-- 顶部控制栏 -->
-      <div class="flex flex-wrap gap-2 mb-4 items-center">
-        <button class="btn-sm btn-secondary" @click="showStartScreen=true">🔄 新游戏</button>
-        <button class="btn-sm btn-secondary" @click="toggleSound">
+    <!-- 债务警告倒计时（图五风格） -->
+    <div v-if="abyssProtocolActive && debt > 0" class="debt-warning-panel">
+      <div class="debt-counter">
+        <span class="debt-label">DEBT</span>
+        <span class="debt-value">£{{ formatNum(debt) }}</span>
+        <span class="debt-interest-rate">+{{ (interestRate * debtMultiplier * 100).toFixed(0) }}%</span>
+      </div>
+      <div class="survival-gauge">
+        <div class="gauge-label">SURVIVAL</div>
+        <div class="gauge-bar">
+          <div class="gauge-fill" :style="{ width: survivalPoints + '%' }" :class="survivalGaugeClass"></div>
+        </div>
+        <div class="gauge-value">{{ Math.round(survivalPoints) }}%</div>
+      </div>
+    </div>
+
+    <h2 class="tool-header cyber-title">💰 一掷千金：秘密金库</h2>
+
+    <!-- 顶部控制栏 -->
+    <div class="flex flex-wrap gap-2 mb-4 items-center">
+      <button class="btn-sm btn-secondary" @click="showStartScreen = true">🔄 新游戏</button>
+      <button class="btn-sm btn-secondary" @click="toggleSound">
         {{ soundOn ? '🔊' : '🔇' }}
       </button>
-      <button class="btn-sm btn-secondary" @click="showStats=true">📊 金库</button>
-      <button v-if="gameState!=='IDLE'&&gameState!=='SELECT_MY_BOX'&&(scriptedGame===0||stats.totalGames>=4)" class="bm-icon-btn" @click="showBlackMarket=true" :class="{'bm-pulse': bankerMood==='angry'||remainingCount<=3}">🏴‍☠️</button>
+      <button class="btn-sm btn-secondary" @click="showStats = true">📊 金库</button>
+      <button v-if="gameState !== 'IDLE' && gameState !== 'SELECT_MY_BOX' && (scriptedGame === 0 || stats.totalGames >= 4)"
+        class="bm-icon-btn" @click="showBlackMarket = true"
+        :class="{ 'bm-pulse': bankerMood === 'angry' || remainingCount <= 3 }">🏴‍☠️</button>
       <span class="ml-auto font-mono flex items-center gap-3">
-        <span class="text-xs" style="color:#ffd700;text-shadow:0 0 8px rgba(255,215,0,0.3)">💼 £{{ formatNum(wallet) }}</span>
+        <span class="text-xs" style="color:#ffd700;text-shadow:0 0 8px rgba(255,215,0,0.3)">💼 £{{ formatNum(wallet)
+          }}</span>
         <span class="text-xs" style="color:#00f0ff">
           R{{ round }}/6 · 📦{{ remainingCount }}
         </span>
@@ -87,13 +91,11 @@
         <div class="rounded-xl p-3" style="background:rgba(0,0,0,0.3);border:1px solid rgba(0,240,255,0.1)">
           <p class="text-xs font-bold mb-2 uppercase tracking-wider" style="color:#64748b">💰 奖金池</p>
           <div class="grid grid-cols-2 gap-1">
-            <div v-for="amt in activeAmounts" :key="amt"
-              :class="['flex items-center gap-1 px-2 py-1 rounded transition-all duration-300',
-                isEliminated(amt) ? 'opacity-15 line-through' : '']"
-              :style="amountRowStyle(amt)">
+            <div v-for="amt in activeAmounts" :key="amt" :class="['flex items-center gap-1 px-2 py-1 rounded transition-all duration-300',
+              isEliminated(amt) ? 'opacity-15 line-through' : '']" :style="amountRowStyle(amt)">
               <span v-if="!isEliminated(amt)" class="w-1.5 h-1.5 rounded-full shrink-0"
-                :style="{background: amt>=10000?'#ffd700':amt>=1000?'#00f0ff':'#64748b'}"></span>
-              <span :class="['text-xs font-bold', isEliminated(amt)?'':'' ]" :style="amountStyle(amt)">
+                :style="{ background: amt >= 10000 ? '#ffd700' : amt >= 1000 ? '#00f0ff' : '#64748b' }"></span>
+              <span :class="['text-xs font-bold', isEliminated(amt) ? '' : '']" :style="amountStyle(amt)">
                 £{{ formatNum(amt) }}
               </span>
             </div>
@@ -105,8 +107,7 @@
           style="background:rgba(139,92,246,0.05);border:1px solid rgba(139,92,246,0.2)">
           <p class="text-xs font-bold mb-1.5 uppercase tracking-wider" style="color:#64748b">🏴‍☠️ 黑市契约</p>
           <div class="flex flex-wrap gap-1.5">
-            <span v-for="(c,i) in purchasedCards" :key="i"
-              class="px-2 py-1 rounded text-xs font-bold"
+            <span v-for="(c, i) in purchasedCards" :key="i" class="px-2 py-1 rounded text-xs font-bold"
               style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);color:#a78bfa">
               {{ c.icon }} {{ c.name }}
             </span>
@@ -114,52 +115,62 @@
         </div>
 
         <!-- 直觉值仪表盘 -->
-        <div v-if="gameState!=='IDLE'&&gameState!=='GAME_OVER'" class="rounded-xl p-2 intuition-meter" :class="{'intuition-flash': intuitionFlash}">
+        <div v-if="gameState !== 'IDLE' && gameState !== 'GAME_OVER'" class="rounded-xl p-2 intuition-meter"
+          :class="{ 'intuition-flash': intuitionFlash }">
           <div class="flex justify-between items-center mb-1">
-            <span class="text-xs font-bold" :style="{color: intuitionValue>70?'#ffd700':intuitionValue>40?'#fb923c':'#64748b'}">
+            <span class="text-xs font-bold"
+              :style="{ color: intuitionValue > 70 ? '#ffd700' : intuitionValue > 40 ? '#fb923c' : '#64748b' }">
               🧠 直觉值
             </span>
-            <span class="text-xs font-bold" :style="{color: intuitionValue>70?'#ffd700':intuitionValue>40?'#fb923c':'#94a3b8'}">
+            <span class="text-xs font-bold"
+              :style="{ color: intuitionValue > 70 ? '#ffd700' : intuitionValue > 40 ? '#fb923c' : '#94a3b8' }">
               {{ intuitionValue }}%
             </span>
           </div>
           <div class="w-full h-2 rounded-full overflow-hidden" style="background:rgba(0,0,0,0.4)">
-            <div class="h-full rounded-full transition-all duration-500 intuition-bar" :style="{width: intuitionValue+'%', background: intuitionValue>70?'linear-gradient(90deg,#f59e0b,#ffd700)':intuitionValue>40?'linear-gradient(90deg,#fb923c,#f59e0b)':'linear-gradient(90deg,#64748b,#94a3b8)'}"></div>
+            <div class="h-full rounded-full transition-all duration-500 intuition-bar"
+              :style="{ width: intuitionValue + '%', background: intuitionValue > 70 ? 'linear-gradient(90deg,#f59e0b,#ffd700)' : intuitionValue > 40 ? 'linear-gradient(90deg,#fb923c,#f59e0b)' : 'linear-gradient(90deg,#64748b,#94a3b8)' }">
+            </div>
           </div>
-          <p v-if="intuitionValue>=80" class="text-xs mt-1 italic" style="color:#ffd700">✨ 直觉敏锐！大奖似乎在召唤你...</p>
-          <p v-else-if="intuitionValue>=50" class="text-xs mt-1 italic" style="color:#fb923c">🔥 运气正在累积...</p>
+          <p v-if="intuitionValue >= 80" class="text-xs mt-1 italic" style="color:#ffd700">✨ 直觉敏锐！大奖似乎在召唤你...</p>
+          <p v-else-if="intuitionValue >= 50" class="text-xs mt-1 italic" style="color:#fb923c">🔥 运气正在累积...</p>
         </div>
         <div v-if="gameState !== 'IDLE' && gameState !== 'TUTORIAL'" class="atlas-portrait-side mb-2">
           <img :src="atlasAiImg" alt="AI Atlas" class="atlas-portrait-img" />
           <p class="text-xs text-center mt-1" style="color:#64748b">AI 阿特拉斯 · 监控中</p>
         </div>
-        <div v-if="bankerMessage || typewriterText" class="banker-bubble" :class="'mood-'+bankerMood">
+        <div v-if="bankerMessage || typewriterText" class="banker-bubble" :class="'mood-' + bankerMood">
           <span class="text-2xl mr-2 shrink-0">{{ bankerEmoji || '📞' }}</span>
           <div class="min-w-0">
             <p class="text-xs font-bold mb-0.5" style="color:#64748b">银行家</p>
             <p class="text-base font-bold leading-tight" style="color:#ffd700">{{ typewriterText || bankerMessage }}</p>
-            <p v-if="bankerBubbleText && !typewriterText" class="text-sm mt-1 italic" style="color:#ff6b6b">"{{ bankerBubbleText }}"</p>
+            <p v-if="bankerBubbleText && !typewriterText" class="text-sm mt-1 italic" style="color:#ff6b6b">"{{
+              bankerBubbleText }}"</p>
           </div>
         </div>
 
         <!-- 游戏状态提示 -->
         <div class="rounded-xl p-3 min-h-[3rem] flex items-center justify-center"
           style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.05)">
-          <p v-if="gameState==='SELECT_MY_BOX'" class="text-base font-bold animate-pulse text-center" style="color:#00f0ff">
+          <p v-if="gameState === 'SELECT_MY_BOX'" class="text-base font-bold animate-pulse text-center"
+            style="color:#00f0ff">
             👆 请选择你的幸运盒子！
           </p>
-          <p v-else-if="gameState==='OPEN_BOXES'" class="text-base font-bold text-center" style="color:#00f0ff">
-            👆 长按 0.8 秒开启盒子<br>
+          <p v-else-if="gameState === 'OPEN_BOXES'" class="text-base font-bold text-center" style="color:#00f0ff">
+            📦 点击开启盒子<br>
             <span class="text-lg">本轮还需 <span class="text-yellow-400">{{ boxesToOpenThisRound }}</span> 个</span>
-            <template v-if="bmActiveEffects.length"><br><span v-for="e in bmActiveEffects" :key="e" class="text-xs text-purple-400">⚠️ {{ e }}</span></template>
+            <template v-if="bmActiveEffects.length"><br><span v-for="e in bmActiveEffects" :key="e"
+                class="text-xs text-purple-400">⚠️ {{ e }}</span></template>
           </p>
-          <p v-else-if="gameState==='BANKER_OFFER'" class="text-lg font-bold animate-pulse text-center" style="color:#ffd700">
+          <p v-else-if="gameState === 'BANKER_OFFER'" class="text-lg font-bold animate-pulse text-center"
+            style="color:#ffd700">
             📞 银行家来电...
           </p>
-          <p v-else-if="gameState==='FINAL_SWAP'" class="text-lg font-bold animate-pulse text-center" style="color:#ff6b6b">
+          <p v-else-if="gameState === 'FINAL_SWAP'" class="text-lg font-bold animate-pulse text-center"
+            style="color:#ff6b6b">
             🔄 终极抉择！
           </p>
-          <p v-else-if="gameState==='GAME_OVER'" class="text-lg font-bold text-center" style="color:#ffd700">
+          <p v-else-if="gameState === 'GAME_OVER'" class="text-lg font-bold text-center" style="color:#ffd700">
             🎊 游戏结束！
           </p>
           <p v-else class="text-sm text-center" style="color:#334155">准备开始</p>
@@ -168,29 +179,61 @@
 
       <!-- ===== 右栏：宝箱网格 ===== -->
       <div class="flex-1 min-w-0 relative">
-        <div v-if="boxLongPressHint" class="box-longpress-toast">{{ boxLongPressHint }}</div>
         <div class="grid gap-2 sm:gap-3" :class="gridCols">
-          <div v-for="box in boxes" :key="box.id"
+          <div
+            v-for="box in boxes"
+            :key="box.id"
             :class="chestClasses(box)"
-            @mousedown="startLongPressOpenBox(box)"
-            @mouseup="cancelLongPressOpenBox"
-            @mouseleave="onBoxMouseLeave"
-            @touchstart.prevent="startLongPressOpenBox(box)"
-            @touchend="cancelLongPressOpenBox"
             @click="onBoxClick(box)"
-            @mouseenter="onBoxHover(box)">
+            @mouseenter="onBoxHover(box)"
+            @mouseleave="onBoxMouseLeave"
+          >
             <!-- 宝箱图片 -->
-            <img :src="chestImg" class="chest-img" :class="{'chest-img-opened': box.opened, 'chest-img-shake': box.animStage==='shake', 'chest-img-glow': box.animStage==='glow', 'chest-img-lucky': !box.opened&&box.id===boxLuckyGlow&&gameState==='SELECT_MY_BOX'}" draggable="false">
+            <img
+              :src="chestImg"
+              class="chest-img"
+              :class="{
+                'chest-img-opened': box.opened,
+                'chest-img-shake': box.animStage === 'shake',
+                'chest-img-unlocking': isBoxOpening(box),
+                'chest-img-glow': box.animStage === 'glow',
+                'chest-img-lucky': !box.opened && box.id === boxLuckyGlow && gameState === 'SELECT_MY_BOX'
+              }"
+              draggable="false"
+            >
             <!-- 箱子编号 -->
-            <div v-if="!box.opened && box.animStage!=='reveal'" class="chest-number">{{ box.id + 1 }}</div>
+            <div v-if="!box.opened && box.animStage !== 'reveal' && !isBoxOpening(box)" class="chest-number">{{ box.id + 1 }}</div>
             <!-- 透视标记（XRay道具） -->
-            <div v-if="box.peeked&&!box.opened" class="peeked-badge">🔍</div>
+            <div v-if="box.peeked && !box.opened" class="peeked-badge">🔍</div>
+            <!-- 开箱暗幕 + 外圈进度 -->
+            <div v-if="isBoxOpening(box)" class="chest-open-overlay"></div>
+            <div
+              v-if="isBoxOpening(box)"
+              class="chest-progress-ring"
+              :style="{ '--progress': longPressProgress, '--ring-color': progressColor(box) }"
+            >
+              <div class="chest-progress-ring__track"></div>
+              <div class="chest-progress-ring__arc"></div>
+              <div class="chest-progress-core">
+                <span class="chest-progress-icon">🔐</span>
+                <span class="chest-progress-label">解析中</span>
+                <span class="chest-progress-pct">{{ Math.round(longPressProgress) }}%</span>
+              </div>
+            </div>
             <!-- 开箱动画：开盖光效 -->
-            <div v-if="box.animStage==='glow'" class="chest-lid-glow"></div>
+            <div v-if="box.animStage === 'glow'" class="chest-lid-glow"></div>
+            <div v-if="box.animStage === 'glow'" class="chest-burst-ring"></div>
             <!-- 揭晓金额 -->
-            <div v-if="box.animStage==='reveal' || box.opened" class="chest-reveal" :class="{'chest-reveal-enter': box.animStage==='reveal'}">
+            <div
+              v-if="box.animStage === 'reveal' || box.opened"
+              class="chest-reveal"
+              :class="{ 'chest-reveal-enter': box.animStage === 'reveal' }"
+            >
               <div class="text-center">
-                <p class="chest-amount" :class="box.amount >= 10000 ? 'amount-gold' : box.amount >= 1000 ? 'amount-cyan' : 'amount-gray'">
+                <p
+                  class="chest-amount"
+                  :class="box.amount >= 10000 ? 'amount-gold' : box.amount >= 1000 ? 'amount-cyan' : 'amount-gray'"
+                >
                   £{{ formatNum(box.amount) }}
                 </p>
               </div>
@@ -198,520 +241,581 @@
             <!-- 我的箱子标记 -->
             <div v-if="box.isMyBox" class="absolute -top-1.5 -right-1.5 text-sm z-10">⭐</div>
             <!-- 透视标记 -->
-            <div v-if="box.peeked && !box.opened && box.animStage!=='reveal'" class="absolute bottom-1 right-1 text-xs opacity-60">👁️</div>
-            <div v-if="longPressBoxId===box.id && longPressProgress>0"
-              class="chest-longpress-progress" :style="{width: longPressProgress+'%'}"></div>
+            <div v-if="box.peeked && !box.opened && box.animStage !== 'reveal'" class="absolute bottom-1 right-1 text-xs opacity-60">👁️</div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- 伪大奖全屏闪光 -->
-    <div v-if="pseudoBigWinActive" class="pseudo-bigwin-overlay"></div>
-    <!-- 暗角特效 -->
-    <div v-if="vignetteActive" class="vignette-overlay"></div>
-    <!-- 金光特效 -->
-    <div v-if="goldGlow" class="gold-glow-overlay"></div>
-    <!-- 屏幕震动 -->
-    <div v-if="screenShake" class="screen-shake-layer"></div>
-    <!-- 聚光灯 -->
-    <div v-if="spotlightOn" class="spotlight-overlay"></div>
-    <!-- 碎裂特效 -->
-    <div v-if="shatterEffect" class="shatter-overlay">
-      <div v-for="i in 12" :key="i" class="shard" :style="shardStyle(i)"></div>
-    </div>
-    <!-- 金光粒子 -->
-    <div v-if="goldParticles" class="gold-particles-layer">
-      <div v-for="i in 20" :key="i" class="gold-particle" :style="particleStyle(i)"></div>
-    </div>
-    <!-- 弹幕层 -->
-    <div v-if="danmakuItems.length" class="danmaku-container" :class="{'danmaku-dimmed': bankerStampTarget>=0}">
-      <div v-for="d in danmakuItems" :key="d.id" class="danmaku-item"
-        :style="{color: d.color, top: d.top+'px', animationDuration: d.speed+'s', '--travel': travelDist}"
-        :class="{
-          'danmaku-stamped': bankerStampTarget===d.id,
-          'left': d.direction === 'left',
-          'execution': d.isExecution,
-          'shatter': d.shatter
-        }">
-        {{ d.text }}
-        <span v-if="bankerStampTarget===d.id" class="banker-x">✖</span>
+      <div v-if="pseudoBigWinActive" class="pseudo-bigwin-overlay"></div>
+      <!-- 暗角特效 -->
+      <div v-if="vignetteActive" class="vignette-overlay"></div>
+      <!-- 金光特效 -->
+      <div v-if="goldGlow" class="gold-glow-overlay"></div>
+      <!-- 屏幕震动 -->
+      <div v-if="screenShake" class="screen-shake-layer"></div>
+      <!-- 聚光灯 -->
+      <div v-if="spotlightOn" class="spotlight-overlay"></div>
+      <!-- 碎裂特效 -->
+      <div v-if="shatterEffect" class="shatter-overlay">
+        <div v-for="i in 12" :key="i" class="shard" :style="shardStyle(i)"></div>
       </div>
-    </div>
-    <!-- 银行家印章 -->
-    <div v-if="bankerStampTarget>=0" class="banker-stamp-overlay">
-      <div class="banker-stamp">BANKER SAYS NO</div>
-    </div>
-
-    <!-- ===== 破产界面 ===== -->
-    <Teleport to="body">
-      <div v-if="isBankrupt && !showResult" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="fixed inset-0 bg-black/80"></div>
-        <div class="relative rounded-2xl p-8 max-w-sm w-full text-center banker-modal" :style="shopTerminalStyle">
-          <div class="text-6xl mb-4">💀</div>
-          <p class="text-xl font-bold mb-2" style="color:#ff4444">破产了！</p>
-          <p class="text-sm mb-4" style="color:#94a3b8">你的资金已不足以进入任何场次<br>当前余额: <span style="color:#ff6b6b">£{{ formatNum(wallet) }}</span></p>
-          <div class="flex gap-3 justify-center">
-            <button class="btn-primary px-6" @click="resetWallet">🆓 领取救济金</button>
-          </div>
-          <p class="text-xs mt-3" style="color:#475569">救济金将重置钱包至£100,000</p>
+      <!-- 金光粒子 -->
+      <div v-if="goldParticles" class="gold-particles-layer">
+        <div v-for="i in 20" :key="i" class="gold-particle" :style="particleStyle(i)"></div>
+      </div>
+      <!-- 弹幕层 -->
+      <div v-if="danmakuItems.length" class="danmaku-container" :class="{ 'danmaku-dimmed': bankerStampTarget >= 0 }">
+        <div v-for="d in danmakuItems" :key="d.id" class="danmaku-item"
+          :style="{ color: d.color, top: d.top + 'px', animationDuration: d.speed + 's', '--travel': travelDist }" :class="{
+            'danmaku-stamped': bankerStampTarget === d.id,
+            'left': d.direction === 'left',
+            'execution': d.isExecution,
+            'shatter': d.shatter
+          }">
+          {{ d.text }}
+          <span v-if="bankerStampTarget === d.id" class="banker-x">✖</span>
         </div>
       </div>
-    </Teleport>
+      <!-- 银行家印章 -->
+      <div v-if="bankerStampTarget >= 0" class="banker-stamp-overlay">
+        <div class="banker-stamp">BANKER SAYS NO</div>
+      </div>
 
-    <!-- ===== 开始/设置界面 ===== -->
-    <Teleport to="body">
-      <div v-if="showStartScreen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="fixed inset-0 bg-black/70" @click="showStartScreen=false"></div>
-        <div class="relative rounded-2xl p-6 max-w-md w-full banker-modal max-h-[85vh] overflow-y-auto" :style="shopTerminalStyle">
-          <div class="flex justify-center mb-3">
-            <img :src="atlasAiImg" alt="Atlas" class="atlas-start-preview" />
+      <!-- ===== 破产界面 ===== -->
+      <Teleport to="body">
+        <div v-if="isBankrupt && !showResult" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div class="fixed inset-0 bg-black/80"></div>
+          <div class="relative rounded-2xl p-8 max-w-sm w-full text-center banker-modal" :style="shopTerminalStyle">
+            <div class="text-6xl mb-4">💀</div>
+            <p class="text-xl font-bold mb-2" style="color:#ff4444">破产了！</p>
+            <p class="text-sm mb-4" style="color:#94a3b8">你的资金已不足以进入任何场次<br>当前余额: <span style="color:#ff6b6b">£{{
+                formatNum(wallet) }}</span></p>
+            <div class="flex gap-3 justify-center">
+              <button class="btn-primary px-6" @click="resetWallet">🆓 领取救济金</button>
+            </div>
+            <p class="text-xs mt-3" style="color:#475569">救济金将重置钱包至£100,000</p>
           </div>
-          <h3 class="text-xl font-bold mb-3 text-center" style="color:#ffd700">💰 一掷千金</h3>
+        </div>
+      </Teleport>
 
-          <p v-if="!tutorialComplete && stats.totalGames < 4" class="text-xs text-center mb-3 px-3 py-2 rounded-lg italic"
-            style="color:#a78bfa;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2)">
-            📖 深渊协议 {{ stats.totalGames + 1 }}/4 · {{ scriptedActLabelNext }}
-          </p>
+      <!-- ===== 开始/设置界面 ===== -->
+      <Teleport to="body">
+        <div v-if="showStartScreen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div class="fixed inset-0 bg-black/70" @click="showStartScreen = false"></div>
+          <div class="relative rounded-2xl p-6 max-w-md w-full banker-modal max-h-[85vh] overflow-y-auto"
+            :style="shopTerminalStyle">
+            <div class="flex justify-center mb-3">
+              <img :src="atlasAiImg" alt="Atlas" class="atlas-start-preview" />
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-center" style="color:#ffd700">💰 一掷千金</h3>
 
-          <!-- 钱包余额 -->
-          <div class="rounded-xl p-3 mb-4 text-center" style="background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25)">
-            <p class="text-xs mb-1" style="color:#64748b">💼 钱包余额</p>
-            <p class="text-2xl font-bold" style="color:#ffd700;text-shadow:0 0 12px rgba(255,215,0,0.4)">£{{ formatNum(wallet) }}</p>
-          </div>
+            <p v-if="!tutorialComplete && stats.totalGames < 4"
+              class="text-xs text-center mb-3 px-3 py-2 rounded-lg italic"
+              style="color:#a78bfa;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2)">
+              📖 深渊协议 {{ stats.totalGames + 1 }}/4 · {{ scriptedActLabelNext }}
+            </p>
 
-          <!-- 门票档位 -->
-          <div class="mb-4">
-            <p class="text-xs mb-2" style="color:#64748b">🎫 选择场次（门票从钱包扣除）</p>
-            <div class="space-y-2">
-              <button v-for="(tier,idx) in TICKET_TIERS" :key="tier.id"
-                :class="['w-full rounded-xl p-3 text-left transition-all duration-200',
-                  selectedTier===idx ? 'ring-2 ring-yellow-400' : '',
-                  wallet < tier.cost ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer hover:scale-[1.02]']"
-                :style="{
-                  background: selectedTier===idx ? 'rgba(255,215,0,0.12)' : 'rgba(0,0,0,0.3)',
-                  border: selectedTier===idx ? '1px solid rgba(255,215,0,0.4)' : '1px solid rgba(255,255,255,0.08)'
-                }"
-                @click="wallet >= tier.cost && (selectedTier = idx)">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <span class="text-lg mr-1.5">{{ tier.icon }}</span>
-                    <span class="text-sm font-bold" style="color:#e2e8f0">{{ tier.name }}</span>
+            <!-- 钱包余额 -->
+            <div class="rounded-xl p-3 mb-4 text-center"
+              style="background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25)">
+              <p class="text-xs mb-1" style="color:#64748b">💼 钱包余额</p>
+              <p class="text-2xl font-bold" style="color:#ffd700;text-shadow:0 0 12px rgba(255,215,0,0.4)">£{{
+                formatNum(wallet) }}</p>
+            </div>
+
+            <!-- 门票档位 -->
+            <div class="mb-4">
+              <p class="text-xs mb-2" style="color:#64748b">🎫 选择场次（门票从钱包扣除）</p>
+              <div class="space-y-2">
+                <button v-for="(tier, idx) in TICKET_TIERS" :key="tier.id" :class="['w-full rounded-xl p-3 text-left transition-all duration-200',
+                  selectedTier === idx ? 'ring-2 ring-yellow-400' : '',
+                  wallet < tier.cost ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer hover:scale-[1.02]']" :style="{
+                    background: selectedTier === idx ? 'rgba(255,215,0,0.12)' : 'rgba(0,0,0,0.3)',
+                    border: selectedTier === idx ? '1px solid rgba(255,215,0,0.4)' : '1px solid rgba(255,255,255,0.08)'
+                  }" @click="wallet >= tier.cost && (selectedTier = idx)">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <span class="text-lg mr-1.5">{{ tier.icon }}</span>
+                      <span class="text-sm font-bold" style="color:#e2e8f0">{{ tier.name }}</span>
+                    </div>
+                    <span class="text-sm font-bold" style="color:#ffd700">门票 £{{ formatNum(tier.cost) }}</span>
                   </div>
-                  <span class="text-sm font-bold" style="color:#ffd700">门票 £{{ formatNum(tier.cost) }}</span>
-                </div>
-                <div class="flex items-center justify-between mt-1">
-                  <span class="text-xs" style="color:#64748b">奖金: £{{ formatNum(tier.amounts[0]) }} ~ £{{ formatNum(tier.amounts[tier.amounts.length-1]) }}</span>
-                  <span v-if="wallet < tier.cost" class="text-xs" style="color:#ff4444">余额不足</span>
-                </div>
+                  <div class="flex items-center justify-between mt-1">
+                    <span class="text-xs" style="color:#64748b">奖金: £{{ formatNum(tier.amounts[0]) }} ~ £{{
+                      formatNum(tier.amounts[tier.amounts.length-1]) }}</span>
+                    <span v-if="wallet < tier.cost" class="text-xs" style="color:#ff4444">余额不足</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <!-- 盒子皮肤 -->
+            <div class="mb-4" v-if="vaultLevel >= 1">
+              <p class="text-xs mb-2" style="color:#64748b">盒子皮肤</p>
+              <div class="flex gap-2 flex-wrap">
+                <button v-for="s in unlockedSkins" :key="s.id"
+                  :class="['btn-sm', boxSkin === s.id ? 'btn-primary' : 'btn-secondary']" @click="boxSkin = s.id">{{ s.icon }}
+                  {{
+                  s.name }}</button>
+              </div>
+            </div>
+
+            <div class="flex gap-2">
+              <button class="btn-primary flex-1" @click="startNewGame"
+                :disabled="wallet < TICKET_TIERS[selectedTier].cost">
+                {{ !tutorialComplete && stats.totalGames < 4 ? '🎬 进入' + (stats.totalGames + 1) + '幕' : '🎮 开始游戏' }}
+                  </button>
+                  <button class="btn-secondary" @click="showStartScreen = false">✖</button>
+            </div>
+          </div>
+        </div>
+      </Teleport>
+
+      <!-- ===== 银行家报价弹窗 ===== -->
+      <Teleport to="body">
+        <div v-if="showOfferModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div class="fixed inset-0 bg-black/70"></div>
+          <div class="relative rounded-2xl p-6 max-w-sm w-full text-center banker-modal" :style="shopTerminalStyle"
+            :class="{ 'shake-anim': bankerMood === 'panic' }">
+            <img :src="atlasAiImg" alt="Atlas" class="atlas-modal-preview mx-auto mb-2" />
+            <div class="text-5xl mb-2">{{ bankerMood === 'angry' ? '😡' : bankerMood === 'panic' ? '😰' : '📞' }}</div>
+            <p class="text-xs mb-1" style="color:#64748b">银行家报价</p>
+            <p class="text-4xl font-bold mb-3 offer-amount-smash"
+              style="color:#ffd700;text-shadow:0 0 20px rgba(255,215,0,0.5)">
+              £{{ formatNum(currentOffer) }}
+            </p>
+            <p v-if="bankerBubbleText" class="text-sm mb-3 italic banker-typewriter" style="color:#ff6b6b">"{{
+              bankerBubbleText }}"</p>
+            <!-- 限时倒计时 -->
+            <div v-if="offerTimer > 0" class="mb-3">
+              <div class="text-2xl font-bold font-mono" :style="{ color: offerTimer <= 3 ? '#ff4444' : '#ffd700' }">
+                ⏱️ {{ offerTimer }}s
+              </div>
+              <div class="w-full h-1 rounded mt-1" style="background:rgba(255,255,255,0.1)">
+                <div class="h-full rounded transition-all duration-1000" style="background:#ffd700"
+                  :style="{ width: (offerTimer / 10 * 100) + '%' }"></div>
+              </div>
+            </div>
+            <div class="flex gap-3 justify-center flex-wrap">
+              <button class="deal-btn px-6 py-3 rounded-xl font-bold text-white text-lg" @click="acceptOffer"
+                @mouseenter="onDealHover">
+                <span class="deal-btn-glow">💰 Deal</span>
+              </button>
+              <button class="nodeal-btn px-6 py-3 rounded-xl font-bold text-white text-lg relative overflow-hidden"
+                @mousedown="startLongPressReject" @mouseup="cancelLongPressReject" @mouseleave="cancelLongPressReject"
+                @touchstart.prevent="startLongPressReject" @touchend="cancelLongPressReject"
+                @mouseenter="onNoDealHover">
+                🚫 No Deal
+                <div class="nodeal-progress" :style="{ width: longPressProgress + '%' }"></div>
               </button>
             </div>
-          </div>
-
-          <!-- 盒子皮肤 -->
-          <div class="mb-4" v-if="vaultLevel >= 1">
-            <p class="text-xs mb-2" style="color:#64748b">盒子皮肤</p>
-            <div class="flex gap-2 flex-wrap">
-              <button v-for="s in unlockedSkins" :key="s.id"
-                :class="['btn-sm', boxSkin===s.id?'btn-primary':'btn-secondary']"
-                @click="boxSkin=s.id">{{ s.icon }} {{ s.name }}</button>
-            </div>
-          </div>
-
-          <div class="flex gap-2">
-            <button class="btn-primary flex-1" @click="startNewGame"
-              :disabled="wallet < TICKET_TIERS[selectedTier].cost">
-              {{ !tutorialComplete && stats.totalGames < 4 ? '🎬 进入' + (stats.totalGames + 1) + '幕' : '🎮 开始游戏' }}
-            </button>
-            <button class="btn-secondary" @click="showStartScreen=false">✖</button>
+            <p v-if="longPressProgress > 0 && longPressProgress < 100" class="text-xs mt-1" style="color:#ff6b6b">
+              长按0.9秒确认拒绝...</p>
           </div>
         </div>
-      </div>
-    </Teleport>
+      </Teleport>
 
-    <!-- ===== 银行家报价弹窗 ===== -->
-    <Teleport to="body">
-      <div v-if="showOfferModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="fixed inset-0 bg-black/70"></div>
-        <div class="relative rounded-2xl p-6 max-w-sm w-full text-center banker-modal" :style="shopTerminalStyle" :class="{'shake-anim': bankerMood==='panic'}">
-          <img :src="atlasAiImg" alt="Atlas" class="atlas-modal-preview mx-auto mb-2" />
-          <div class="text-5xl mb-2">{{ bankerMood==='angry'?'😡':bankerMood==='panic'?'😰':'📞' }}</div>
-          <p class="text-xs mb-1" style="color:#64748b">银行家报价</p>
-          <p class="text-4xl font-bold mb-3 offer-amount-smash" style="color:#ffd700;text-shadow:0 0 20px rgba(255,215,0,0.5)">
-            £{{ formatNum(currentOffer) }}
-          </p>
-          <p v-if="bankerBubbleText" class="text-sm mb-3 italic banker-typewriter" style="color:#ff6b6b">"{{ bankerBubbleText }}"</p>
-          <!-- 限时倒计时 -->
-          <div v-if="offerTimer > 0" class="mb-3">
-            <div class="text-2xl font-bold font-mono" :style="{color: offerTimer<=3?'#ff4444':'#ffd700'}">
-              ⏱️ {{ offerTimer }}s
-            </div>
-            <div class="w-full h-1 rounded mt-1" style="background:rgba(255,255,255,0.1)">
-              <div class="h-full rounded transition-all duration-1000" style="background:#ffd700"
-                :style="{width: (offerTimer/10*100)+'%'}"></div>
-            </div>
-          </div>
-          <div class="flex gap-3 justify-center flex-wrap">
-            <button class="deal-btn px-6 py-3 rounded-xl font-bold text-white text-lg" 
-              @click="acceptOffer" @mouseenter="onDealHover">
-              <span class="deal-btn-glow">💰 Deal</span>
-            </button>
-            <button class="nodeal-btn px-6 py-3 rounded-xl font-bold text-white text-lg relative overflow-hidden"
-              @mousedown="startLongPressReject" @mouseup="cancelLongPressReject" @mouseleave="cancelLongPressReject"
-              @touchstart.prevent="startLongPressReject" @touchend="cancelLongPressReject"
-              @mouseenter="onNoDealHover">
-              🚫 No Deal
-              <div class="nodeal-progress" :style="{width: longPressProgress+'%'}"></div>
-            </button>
-          </div>
-          <p v-if="longPressProgress>0&&longPressProgress<100" class="text-xs mt-1" style="color:#ff6b6b">长按0.9秒确认拒绝...</p>
-        </div>
-      </div>
-    </Teleport>
-
-    <!-- ===== 终极抉择弹窗 ===== -->
-    <Teleport to="body">
-      <div v-if="gameState==='FINAL_SWAP'" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="fixed inset-0 bg-black/80"></div>
-        <div class="relative rounded-2xl p-6 max-w-sm w-full text-center banker-modal" :style="shopTerminalStyle" :class="{'shake-anim': finalTimer<=3&&finalTimer>0}">
-          <div class="text-5xl mb-2">🔄</div>
-          <p class="text-lg font-bold mb-2" style="color:#ff6b6b">⚡ 终极抉择 ⚡</p>
-          <p class="text-base mb-1" style="color:#00f0ff">你的盒子: <strong>{{ myBoxId!==null?(myBoxId+1)+'号':'?' }}</strong></p>
-          <p class="text-sm mb-2" style="color:#ff6b6b">
-            剩余: <span v-for="(b,i) in remainingBoxes" :key="b.id">{{ i>0?', ':'' }}{{ b.id+1 }}号</span>
-          </p>
-          <!-- 银行家终极台词 -->
-          <p v-if="bankerBubbleText" class="text-sm mb-3 italic p-3 rounded-lg" style="color:#ffd700;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2)">
-            "{{ bankerBubbleText }}"
-          </p>
-          <!-- 限时 -->
-          <div v-if="finalTimer > 0" class="mb-3">
-            <div class="text-3xl font-bold font-mono" :style="{color: finalTimer<=3?'#ff4444':'#ffd700'}">
-              ⏱️ {{ finalTimer }}s
-            </div>
-            <div class="w-full h-2 rounded mt-1" style="background:rgba(255,255,255,0.1)">
-              <div class="h-full rounded transition-all duration-1000" style="background:linear-gradient(90deg,#ff4444,#ffd700)"
-                :style="{width: (finalTimer/15*100)+'%'}"></div>
-            </div>
-          </div>
-          <div class="flex gap-3 justify-center flex-wrap">
-            <button class="deal-btn px-5 py-3 rounded-xl font-bold text-white" @click="doSwap">
-              <span class="deal-btn-glow">🔄 交换</span>
-            </button>
-            <button class="nodeal-btn px-5 py-3 rounded-xl font-bold text-white relative overflow-hidden" @click="noSwap">✋ 保留</button>
-            <button v-if="remainingBoxes.length===1"
-              class="double-btn px-5 py-3 rounded-xl font-bold text-white"
-              @click="doubleOrNothing">
-              🎰 双倍对赌
-            </button>
-          </div>
-          <p v-if="remainingBoxes.length===1" class="text-xs mt-2" style="color:#64748b">
-            ⚠️ 大奖翻倍，小奖清零
-          </p>
-        </div>
-      </div>
-    </Teleport>
-
-    <!-- ===== 结算弹窗（赛博金库终端） ===== -->
-    <Teleport to="body">
-      <div v-if="showResult" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="fixed inset-0 bg-black/80"></div>
-        <div class="relative rounded-2xl p-6 max-w-md w-full text-center banker-modal max-h-[90vh] overflow-y-auto result-terminal" :style="shopTerminalStyle">
-          <!-- 过渡动画 -->
-          <div v-if="resultTransition" class="result-transition">
-            <div v-for="i in 8" :key="i" class="transition-blind" :style="{animationDelay:i*0.06+'s'}"></div>
-          </div>
-          <!-- 战利品展示 -->
-          <div class="mb-4">
-            <div class="text-4xl mb-2 result-icon-anim">{{ winAmount>=50000?'🎉':winAmount>=10000?'😊':'😅' }}</div>
-            <p class="text-sm mb-1" style="color:#94a3b8">
-              {{ offerAccepted?'你接受了报价':doubleMode?'双倍对赌！':'你打开了自己的盒子' }}
+      <!-- ===== 终极抉择弹窗 ===== -->
+      <Teleport to="body">
+        <div v-if="gameState === 'FINAL_SWAP'" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div class="fixed inset-0 bg-black/80"></div>
+          <div class="relative rounded-2xl p-6 max-w-sm w-full text-center banker-modal" :style="shopTerminalStyle"
+            :class="{ 'shake-anim': finalTimer <= 3 && finalTimer > 0 }">
+            <div class="text-5xl mb-2">🔄</div>
+            <p class="text-lg font-bold mb-2" style="color:#ff6b6b">⚡ 终极抉择 ⚡</p>
+            <p class="text-base mb-1" style="color:#00f0ff">你的盒子: <strong>{{ myBoxId !== null ? (myBoxId + 1) + '号' : '?'
+                }}</strong>
             </p>
-            <div class="slot-machine">
-              <p class="text-5xl font-black slot-number" :class="winAmount>=50000?'text-gold':winAmount>=10000?'text-cyan':'text-gray'">
-                £{{ formatNum(displayAmount) }}
+            <p class="text-sm mb-2" style="color:#ff6b6b">
+              剩余: <span v-for="(b, i) in remainingBoxes" :key="b.id">{{ i > 0 ? ', ' : '' }}{{ b.id + 1 }}号</span>
+            </p>
+            <!-- 银行家终极台词 -->
+            <p v-if="bankerBubbleText" class="text-sm mb-3 italic p-3 rounded-lg"
+              style="color:#ffd700;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2)">
+              "{{ bankerBubbleText }}"
+            </p>
+            <!-- 限时 -->
+            <div v-if="finalTimer > 0" class="mb-3">
+              <div class="text-3xl font-bold font-mono" :style="{ color: finalTimer <= 3 ? '#ff4444' : '#ffd700' }">
+                ⏱️ {{ finalTimer }}s
+              </div>
+              <div class="w-full h-2 rounded mt-1" style="background:rgba(255,255,255,0.1)">
+                <div class="h-full rounded transition-all duration-1000"
+                  style="background:linear-gradient(90deg,#ff4444,#ffd700)" :style="{ width: (finalTimer / 15 * 100) + '%' }">
+                </div>
+              </div>
+            </div>
+            <div class="flex gap-3 justify-center flex-wrap">
+              <button class="deal-btn px-5 py-3 rounded-xl font-bold text-white" @click="doSwap">
+                <span class="deal-btn-glow">🔄 交换</span>
+              </button>
+              <button class="nodeal-btn px-5 py-3 rounded-xl font-bold text-white relative overflow-hidden"
+                @click="noSwap">✋
+                保留</button>
+              <button v-if="remainingBoxes.length === 1" class="double-btn px-5 py-3 rounded-xl font-bold text-white"
+                @click="doubleOrNothing">
+                🎰 双倍对赌
+              </button>
+            </div>
+            <p v-if="remainingBoxes.length === 1" class="text-xs mt-2" style="color:#64748b">
+              ⚠️ 大奖翻倍，小奖清零
+            </p>
+          </div>
+        </div>
+      </Teleport>
+
+      <!-- ===== 结算弹窗（赛博金库终端） ===== -->
+      <Teleport to="body">
+        <div v-if="showResult" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div class="fixed inset-0 bg-black/80"></div>
+          <div
+            class="relative rounded-2xl p-6 max-w-md w-full text-center banker-modal max-h-[90vh] overflow-y-auto result-terminal"
+            :style="shopTerminalStyle">
+            <!-- 过渡动画 -->
+            <div v-if="resultTransition" class="result-transition">
+              <div v-for="i in 8" :key="i" class="transition-blind" :style="{ animationDelay: i * 0.06 + 's' }"></div>
+            </div>
+            <!-- 战利品展示 -->
+            <div class="mb-4">
+              <div class="text-4xl mb-2 result-icon-anim">{{ winAmount >= 50000 ? '🎉' : winAmount >= 10000 ? '😊' : '😅' }}</div>
+              <p class="text-sm mb-1" style="color:#94a3b8">
+                {{ offerAccepted ? '你接受了报价' : doubleMode ? '双倍对赌！' : '你打开了自己的盒子' }}
+              </p>
+              <div class="slot-machine">
+                <p class="text-5xl font-black slot-number"
+                  :class="winAmount >= 50000 ? 'text-gold' : winAmount >= 10000 ? 'text-cyan' : 'text-gray'">
+                  £{{ formatNum(displayAmount) }}
+                </p>
+              </div>
+              <div v-if="winAmount >= 50000" class="win-glow-ring"></div>
+            </div>
+            <!-- 剧本幕次 -->
+            <div v-if="scriptedGame >= 1 && scriptedGame <= 4" class="mb-3 px-3 py-2 rounded-lg"
+              style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.25)">
+              <p class="text-xs font-bold" style="color:#a78bfa">{{ scriptedActLabel }}</p>
+              <p v-if="scriptedNextHook" class="text-xs mt-1 italic" style="color:#94a3b8">{{ scriptedNextHook }}</p>
+            </div>
+            <!-- 本局标签 -->
+            <div v-if="gameTags.length" class="flex flex-wrap gap-1 justify-center mb-3">
+              <span v-for="t in gameTags" :key="t" class="px-2 py-0.5 rounded text-xs font-bold"
+                style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);color:#ffd700">{{ t }}</span>
+            </div>
+            <!-- 终极审判 -->
+            <div v-if="offerAccepted && myBoxRevealText" class="p-3 rounded-lg mb-3" :style="myBoxRevealStyle">
+              <p class="text-lg font-bold mb-1">{{ myBoxRevealEmoji }}</p>
+              <p class="text-sm" :style="{ color: myBoxRevealColor }">{{ myBoxRevealText }}</p>
+              <p class="text-xs mt-1" style="color:#64748b">{{ bankerReactionText }}</p>
+            </div>
+            <!-- 银行家赛后点评 -->
+            <div class="banker-post p-3 rounded-xl mb-3" :class="'banker-post-' + bankerPostMood">
+              <div class="flex items-start gap-2">
+                <span class="text-3xl shrink-0">{{ bankerPostEmoji }}</span>
+                <div class="min-w-0">
+                  <p class="text-xs font-bold" style="color:#64748b">银行家赛后点评</p>
+                  <p class="text-sm font-bold leading-tight" style="color:#ffd700">"{{ bankerPostComment }}"</p>
+                </div>
+              </div>
+            </div>
+            <!-- 错失大奖揭晓 -->
+            <div v-if="nearMissRevealActive" class="near-miss-panel mb-3 px-3 py-2 rounded-lg"
+              :class="{ 'near-miss-complete': nearMissRevealComplete }">
+              <p class="text-xs font-bold mb-1" style="color:#ff6b6b">💔 场上剩余盒子揭晓</p>
+              <div class="w-full h-1.5 rounded mb-2" style="background:rgba(255,255,255,0.1)">
+                <div class="h-full rounded transition-all duration-300"
+                  style="background:linear-gradient(90deg,#ff4444,#ffd700)"
+                  :style="{ width: nearMissRevealProgress + '%' }">
+                </div>
+              </div>
+              <p v-if="nearMissRevealComplete" class="text-sm font-bold animate-pulse" style="color:#ffd700">{{
+                nearMissRevealText }}</p>
+              <p v-else class="text-xs italic" style="color:#64748b">正在翻开剩余盒子…</p>
+            </div>
+            <!-- 黑金碎片 -->
+            <div v-if="fragmentsEarnedThisGame > 0" class="fragment-panel mb-3 px-3 py-2 rounded-lg"
+              style="background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.2)">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold" style="color:#ffd700">🧩 黑金碎片 +{{ fragmentsEarnedThisGame }}</span>
+                <span class="text-xs" style="color:#94a3b8">{{ stats.blackGoldFragments }}/{{ FRAGMENT_GOAL }}</span>
+              </div>
+              <div class="w-full h-2 rounded" style="background:rgba(0,0,0,0.3)">
+                <div class="h-full rounded transition-all" style="background:linear-gradient(90deg,#64748b,#ffd700)"
+                  :style="{ width: fragmentProgress + '%' }"></div>
+              </div>
+              <p v-if="fragmentsToUnlock > 0 && fragmentsToUnlock <= 3" class="text-xs mt-1 animate-pulse"
+                style="color:#ffd700">
+                再收集 {{ fragmentsToUnlock }} 个解锁【🦹 暗黑银行家】皮肤！
+              </p>
+              <p v-else-if="fragmentsToUnlock === 0" class="text-xs mt-1" style="color:#4ade80">✨ 【暗黑银行家】皮肤已解锁！</p>
+            </div>
+            <!-- 挑衅成就 -->
+            <div v-if="provocationBadge" class="provocation-badge mb-3 px-3 py-2 rounded-lg"
+              style="background:rgba(255,68,68,0.1);border:1px solid rgba(255,68,68,0.35)">
+              <p class="text-lg mb-0.5">{{ provocationBadge.icon }}</p>
+              <p class="text-sm font-bold" style="color:#ff6b6b">挑衅成就：{{ provocationBadge.name }}</p>
+              <p class="text-xs italic" style="color:#94a3b8">{{ provocationBadge.desc }}</p>
+            </div>
+            <!-- 弹幕定格 -->
+            <div v-if="frozenDanmaku.length" class="mb-3">
+              <p class="text-xs mb-1" style="color:#64748b">💬 弹幕定格</p>
+              <div class="flex flex-wrap gap-1 justify-center">
+                <span v-for="(d, i) in frozenDanmaku" :key="i" class="px-2 py-0.5 rounded text-xs"
+                  :style="{ color: d.color, background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.08)' }">{{
+                  d.text
+                  }}</span>
+              </div>
+            </div>
+            <!-- 收支明细 -->
+            <div class="rounded-lg p-2 mb-3" style="background:rgba(0,0,0,0.3)">
+              <div class="flex justify-between text-xs" style="color:#94a3b8"><span>🎫 门票支出</span><span
+                  style="color:#ff6b6b">-£{{ formatNum(currentTicketCost) }}</span></div>
+              <div class="flex justify-between text-xs" style="color:#94a3b8"><span>💰 本局收益</span><span
+                  :style="{ color: winAmount > currentTicketCost ? '#4ade80' : '#ff6b6b' }">+£{{ formatNum(winAmount) }}</span>
+              </div>
+              <div class="border-t my-1" style="border-color:rgba(255,255,255,0.08)"></div>
+              <div class="flex justify-between text-xs font-bold" style="color:#e2e8f0">
+                <span>净盈亏</span>
+                <span :style="{ color: (winAmount - currentTicketCost) >= 0 ? '#4ade80' : '#ff6b6b' }">{{
+                  (winAmount - currentTicketCost)>=0?'+':'' }}£{{ formatNum(winAmount - currentTicketCost) }}</span>
+              </div>
+              <div class="flex justify-between text-xs mt-1" style="color:#94a3b8"><span>💼 钱包余额</span><span
+                  style="color:#ffd700">£{{ formatNum(wallet) }}</span></div>
+            </div>
+            <!-- 破产 -->
+            <div v-if="isBankrupt" class="rounded-lg p-3 mb-3"
+              style="background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3)">
+              <p class="text-sm font-bold mb-2" style="color:#ff4444">💀 破产了！</p>
+              <button class="btn-sm btn-secondary" @click="resetWallet">🆓 领取救济金 £100,000</button>
+            </div>
+            <!-- 本局数据 -->
+            <div class="grid grid-cols-3 gap-2 mb-3 text-xs" style="color:#94a3b8">
+              <div>
+                <p style="color:#64748b">贪婪指数</p>
+                <p style="color:#00f0ff">{{ greedIndex }}%</p>
+              </div>
+              <div>
+                <p style="color:#64748b">运气评分</p>
+                <p style="color:#ffd700">{{ luckScore }}</p>
+              </div>
+              <div>
+                <p style="color:#64748b">抗压能力</p>
+                <p style="color:#ff6b6b">{{ stressResist }}%</p>
+              </div>
+            </div>
+            <!-- 成就 -->
+            <div v-if="newAchievements.length" class="mb-3">
+              <p class="text-xs mb-1" style="color:#ffd700">🏅 新成就解锁！</p>
+              <div class="flex flex-wrap gap-1 justify-center">
+                <span v-for="a in newAchievements" :key="a" class="game-badge">{{ a }}</span>
+              </div>
+            </div>
+            <!-- 解锁进度 -->
+            <div v-if="unlockHint" class="rounded-lg p-2 mb-3"
+              style="background:rgba(0,240,255,0.05);border:1px solid rgba(0,240,255,0.15)">
+              <p class="text-xs" style="color:#00f0ff">{{ unlockHint }}</p>
+            </div>
+            <!-- 黑市账单 -->
+            <div v-if="purchasedCards.length" class="rounded-lg p-3 mb-3"
+              style="background:rgba(139,92,246,0.05);border:1px solid rgba(139,92,246,0.2)">
+              <p class="text-xs font-bold mb-1" style="color:#a78bfa">🏴‍☠️ 黑市账单</p>
+              <div v-for="(c, i) in purchasedCards" :key="i" class="flex justify-between text-xs py-0.5"
+                style="color:#94a3b8">
+                <span>{{ c.icon }} {{ c.name }}</span>
+                <span style="color:#ff6b6b">-£{{ formatNum(c.costPaid) }}</span>
+              </div>
+              <div class="border-t my-1" style="border-color:rgba(139,92,246,0.2)"></div>
+              <div class="flex justify-between text-xs font-bold">
+                <span style="color:#a78bfa">总支出</span>
+                <span style="color:#ff6b6b">-£{{ formatNum(bmTotalSpent) }}</span>
+              </div>
+              <p v-if="bmSideEffectLog" class="text-xs mt-1 italic" style="color:#ff6b6b">⚠️ {{ bmSideEffectLog }}</p>
+            </div>
+            <!-- 平行宇宙对比 -->
+            <div v-if="parallelUniverseActive" class="parallel-universe rounded-xl p-3 mb-3">
+              <p class="text-xs font-bold mb-2 text-center" style="color:#64748b">⚖️ 平行宇宙复盘</p>
+              <div class="flex gap-2">
+                <div class="flex-1 rounded-lg p-2"
+                  style="background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.25)">
+                  <p class="text-xs mb-0.5" style="color:#ff6b6b">❗ 残酷现实</p>
+                  <p class="text-lg font-black" style="color:#ff6b6b">£{{ formatNum(winAmount) }}</p>
+                  <p class="text-xs" style="color:#64748b">{{ offerAccepted ? '接受了报价' : '开出的盒子' }}</p>
+                </div>
+                <div class="flex items-center">
+                  <span class="text-2xl">⚔️</span>
+                </div>
+                <div class="flex-1 rounded-lg p-2"
+                  style="background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25)">
+                  <p class="text-xs mb-0.5" style="color:#ffd700">✨ 如果…</p>
+                  <p class="text-lg font-black" style="color:#ffd700">£{{ formatNum(parallelUniverseWin) }}</p>
+                  <p class="text-xs" style="color:#64748b">{{ offerAccepted ? '你的盒子实际价值' : '接受最高报价' }}</p>
+                </div>
+              </div>
+              <p class="text-xs mt-2 text-center italic" style="color:#ff6b6b">你“损失”了 £{{ formatNum(revengeAmount) }}
               </p>
             </div>
-            <div v-if="winAmount>=50000" class="win-glow-ring"></div>
-          </div>
-          <!-- 剧本幕次 -->
-          <div v-if="scriptedGame>=1&&scriptedGame<=4" class="mb-3 px-3 py-2 rounded-lg"
-            style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.25)">
-            <p class="text-xs font-bold" style="color:#a78bfa">{{ scriptedActLabel }}</p>
-            <p v-if="scriptedNextHook" class="text-xs mt-1 italic" style="color:#94a3b8">{{ scriptedNextHook }}</p>
-          </div>
-          <!-- 本局标签 -->
-          <div v-if="gameTags.length" class="flex flex-wrap gap-1 justify-center mb-3">
-            <span v-for="t in gameTags" :key="t" class="px-2 py-0.5 rounded text-xs font-bold" style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);color:#ffd700">{{ t }}</span>
-          </div>
-          <!-- 终极审判 -->
-          <div v-if="offerAccepted && myBoxRevealText" class="p-3 rounded-lg mb-3" :style="myBoxRevealStyle">
-            <p class="text-lg font-bold mb-1">{{ myBoxRevealEmoji }}</p>
-            <p class="text-sm" :style="{color: myBoxRevealColor}">{{ myBoxRevealText }}</p>
-            <p class="text-xs mt-1" style="color:#64748b">{{ bankerReactionText }}</p>
-          </div>
-          <!-- 银行家赛后点评 -->
-          <div class="banker-post p-3 rounded-xl mb-3" :class="'banker-post-'+bankerPostMood">
-            <div class="flex items-start gap-2">
-              <span class="text-3xl shrink-0">{{ bankerPostEmoji }}</span>
-              <div class="min-w-0">
-                <p class="text-xs font-bold" style="color:#64748b">银行家赛后点评</p>
-                <p class="text-sm font-bold leading-tight" style="color:#ffd700">"{{ bankerPostComment }}"</p>
-              </div>
+            <p class="text-xs mb-2" style="color:#64748b">金库点数 +{{ earnedPoints }}</p>
+            <!-- 按钮区 -->
+            <div class="flex gap-2 justify-center mb-2 flex-wrap">
+              <button v-if="revengeButtonLabel" class="revenge-btn px-6 py-3 rounded-xl font-bold text-white text-lg"
+                @click="quickReplay">
+                {{ revengeButtonLabel }}
+              </button>
+              <button class="quick-replay-btn px-6 py-3 rounded-xl font-bold text-white text-lg quick-replay-pulse"
+                @click="quickReplay">
+                🔄 再来一局
+              </button>
+              <button class="btn-secondary px-4 py-3" @click="generateBattleReport">📸 战报</button>
+              <button class="btn-secondary px-4" @click="showResult = false; showStats = true">📊 金库</button>
             </div>
-          </div>
-          <!-- 错失大奖揭晓 -->
-          <div v-if="nearMissRevealActive" class="near-miss-panel mb-3 px-3 py-2 rounded-lg"
-            :class="{'near-miss-complete': nearMissRevealComplete}">
-            <p class="text-xs font-bold mb-1" style="color:#ff6b6b">💔 场上剩余盒子揭晓</p>
-            <div class="w-full h-1.5 rounded mb-2" style="background:rgba(255,255,255,0.1)">
-              <div class="h-full rounded transition-all duration-300" style="background:linear-gradient(90deg,#ff4444,#ffd700)"
-                :style="{width: nearMissRevealProgress+'%'}"></div>
+            <p class="text-xs" style="color:#334155">按 <kbd class="px-1 py-0.5 rounded"
+                style="background:rgba(255,255,255,0.1);color:#94a3b8">空格</kbd> 极速重开 · 0.5秒进入下一局</p>
+            <div class="flex items-center justify-center gap-3 mt-2 flex-wrap">
+              <label v-if="scriptedGame === 0 || stats.totalGames >= 4" class="flex items-center gap-1 text-xs cursor-pointer"
+                style="color:#64748b">
+                <input type="checkbox" v-model="skipAnimation" @change="saveSettings" class="accent-cyan-500"> 跳过开箱动画
+              </label>
+              <label v-if="scriptedGame === 0 || stats.totalGames >= 4" class="flex items-center gap-1 text-xs cursor-pointer"
+                style="color:#64748b">
+                <input type="checkbox" v-model="skipBankerDialog" @change="saveSettings" class="accent-cyan-500">
+                跳过银行家废话
+              </label>
+              <p v-else class="text-xs italic" style="color:#334155">🔒 新手引导中，请完整体验剧情...</p>
             </div>
-            <p v-if="nearMissRevealComplete" class="text-sm font-bold animate-pulse" style="color:#ffd700">{{ nearMissRevealText }}</p>
-            <p v-else class="text-xs italic" style="color:#64748b">正在翻开剩余盒子…</p>
-          </div>
-          <!-- 黑金碎片 -->
-          <div v-if="fragmentsEarnedThisGame > 0" class="fragment-panel mb-3 px-3 py-2 rounded-lg"
-            style="background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.2)">
-            <div class="flex justify-between items-center mb-1">
-              <span class="text-xs font-bold" style="color:#ffd700">🧩 黑金碎片 +{{ fragmentsEarnedThisGame }}</span>
-              <span class="text-xs" style="color:#94a3b8">{{ stats.blackGoldFragments }}/{{ FRAGMENT_GOAL }}</span>
-            </div>
-            <div class="w-full h-2 rounded" style="background:rgba(0,0,0,0.3)">
-              <div class="h-full rounded transition-all" style="background:linear-gradient(90deg,#64748b,#ffd700)"
-                :style="{width: fragmentProgress+'%'}"></div>
-            </div>
-            <p v-if="fragmentsToUnlock > 0 && fragmentsToUnlock <= 3" class="text-xs mt-1 animate-pulse" style="color:#ffd700">
-              再收集 {{ fragmentsToUnlock }} 个解锁【🦹 暗黑银行家】皮肤！
-            </p>
-            <p v-else-if="fragmentsToUnlock === 0" class="text-xs mt-1" style="color:#4ade80">✨ 【暗黑银行家】皮肤已解锁！</p>
-          </div>
-          <!-- 挑衅成就 -->
-          <div v-if="provocationBadge" class="provocation-badge mb-3 px-3 py-2 rounded-lg"
-            style="background:rgba(255,68,68,0.1);border:1px solid rgba(255,68,68,0.35)">
-            <p class="text-lg mb-0.5">{{ provocationBadge.icon }}</p>
-            <p class="text-sm font-bold" style="color:#ff6b6b">挑衅成就：{{ provocationBadge.name }}</p>
-            <p class="text-xs italic" style="color:#94a3b8">{{ provocationBadge.desc }}</p>
-          </div>
-          <!-- 弹幕定格 -->
-          <div v-if="frozenDanmaku.length" class="mb-3">
-            <p class="text-xs mb-1" style="color:#64748b">💬 弹幕定格</p>
-            <div class="flex flex-wrap gap-1 justify-center">
-              <span v-for="(d,i) in frozenDanmaku" :key="i" class="px-2 py-0.5 rounded text-xs" :style="{color:d.color,background:'rgba(0,0,0,0.3)',border:'1px solid rgba(255,255,255,0.08)'}">{{ d.text }}</span>
-            </div>
-          </div>
-          <!-- 收支明细 -->
-          <div class="rounded-lg p-2 mb-3" style="background:rgba(0,0,0,0.3)">
-            <div class="flex justify-between text-xs" style="color:#94a3b8"><span>🎫 门票支出</span><span style="color:#ff6b6b">-£{{ formatNum(currentTicketCost) }}</span></div>
-            <div class="flex justify-between text-xs" style="color:#94a3b8"><span>💰 本局收益</span><span :style="{color:winAmount>currentTicketCost?'#4ade80':'#ff6b6b'}">+£{{ formatNum(winAmount) }}</span></div>
-            <div class="border-t my-1" style="border-color:rgba(255,255,255,0.08)"></div>
-            <div class="flex justify-between text-xs font-bold" style="color:#e2e8f0">
-              <span>净盈亏</span>
-              <span :style="{color:(winAmount-currentTicketCost)>=0?'#4ade80':'#ff6b6b'}">{{ (winAmount-currentTicketCost)>=0?'+':'' }}£{{ formatNum(winAmount-currentTicketCost) }}</span>
-            </div>
-            <div class="flex justify-between text-xs mt-1" style="color:#94a3b8"><span>💼 钱包余额</span><span style="color:#ffd700">£{{ formatNum(wallet) }}</span></div>
-          </div>
-          <!-- 破产 -->
-          <div v-if="isBankrupt" class="rounded-lg p-3 mb-3" style="background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3)">
-            <p class="text-sm font-bold mb-2" style="color:#ff4444">💀 破产了！</p>
-            <button class="btn-sm btn-secondary" @click="resetWallet">🆓 领取救济金 £100,000</button>
-          </div>
-          <!-- 本局数据 -->
-          <div class="grid grid-cols-3 gap-2 mb-3 text-xs" style="color:#94a3b8">
-            <div><p style="color:#64748b">贪婪指数</p><p style="color:#00f0ff">{{ greedIndex }}%</p></div>
-            <div><p style="color:#64748b">运气评分</p><p style="color:#ffd700">{{ luckScore }}</p></div>
-            <div><p style="color:#64748b">抗压能力</p><p style="color:#ff6b6b">{{ stressResist }}%</p></div>
-          </div>
-          <!-- 成就 -->
-          <div v-if="newAchievements.length" class="mb-3">
-            <p class="text-xs mb-1" style="color:#ffd700">🏅 新成就解锁！</p>
-            <div class="flex flex-wrap gap-1 justify-center">
-              <span v-for="a in newAchievements" :key="a" class="game-badge">{{ a }}</span>
-            </div>
-          </div>
-          <!-- 解锁进度 -->
-          <div v-if="unlockHint" class="rounded-lg p-2 mb-3" style="background:rgba(0,240,255,0.05);border:1px solid rgba(0,240,255,0.15)">
-            <p class="text-xs" style="color:#00f0ff">{{ unlockHint }}</p>
-          </div>
-          <!-- 黑市账单 -->
-          <div v-if="purchasedCards.length" class="rounded-lg p-3 mb-3" style="background:rgba(139,92,246,0.05);border:1px solid rgba(139,92,246,0.2)">
-            <p class="text-xs font-bold mb-1" style="color:#a78bfa">🏴‍☠️ 黑市账单</p>
-            <div v-for="(c,i) in purchasedCards" :key="i" class="flex justify-between text-xs py-0.5" style="color:#94a3b8">
-              <span>{{ c.icon }} {{ c.name }}</span>
-              <span style="color:#ff6b6b">-£{{ formatNum(c.costPaid) }}</span>
-            </div>
-            <div class="border-t my-1" style="border-color:rgba(139,92,246,0.2)"></div>
-            <div class="flex justify-between text-xs font-bold">
-              <span style="color:#a78bfa">总支出</span>
-              <span style="color:#ff6b6b">-£{{ formatNum(bmTotalSpent) }}</span>
-            </div>
-            <p v-if="bmSideEffectLog" class="text-xs mt-1 italic" style="color:#ff6b6b">⚠️ {{ bmSideEffectLog }}</p>
-          </div>
-          <!-- 平行宇宙对比 -->
-          <div v-if="parallelUniverseActive" class="parallel-universe rounded-xl p-3 mb-3">
-            <p class="text-xs font-bold mb-2 text-center" style="color:#64748b">⚖️ 平行宇宙复盘</p>
-            <div class="flex gap-2">
-              <div class="flex-1 rounded-lg p-2" style="background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.25)">
-                <p class="text-xs mb-0.5" style="color:#ff6b6b">❗ 残酷现实</p>
-                <p class="text-lg font-black" style="color:#ff6b6b">£{{ formatNum(winAmount) }}</p>
-                <p class="text-xs" style="color:#64748b">{{ offerAccepted?'接受了报价':'开出的盒子' }}</p>
-              </div>
-              <div class="flex items-center">
-                <span class="text-2xl">⚔️</span>
-              </div>
-              <div class="flex-1 rounded-lg p-2" style="background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25)">
-                <p class="text-xs mb-0.5" style="color:#ffd700">✨ 如果…</p>
-                <p class="text-lg font-black" style="color:#ffd700">£{{ formatNum(parallelUniverseWin) }}</p>
-                <p class="text-xs" style="color:#64748b">{{ offerAccepted?'你的盒子实际价值':'接受最高报价' }}</p>
-              </div>
-            </div>
-            <p class="text-xs mt-2 text-center italic" style="color:#ff6b6b">你“损失”了 £{{ formatNum(revengeAmount) }}</p>
-          </div>
-          <p class="text-xs mb-2" style="color:#64748b">金库点数 +{{ earnedPoints }}</p>
-          <!-- 按钮区 -->
-          <div class="flex gap-2 justify-center mb-2 flex-wrap">
-            <button v-if="revengeButtonLabel" class="revenge-btn px-6 py-3 rounded-xl font-bold text-white text-lg" @click="quickReplay">
-              {{ revengeButtonLabel }}
-            </button>
-            <button class="quick-replay-btn px-6 py-3 rounded-xl font-bold text-white text-lg quick-replay-pulse" @click="quickReplay">
-              🔄 再来一局
-            </button>
-            <button class="btn-secondary px-4 py-3" @click="generateBattleReport">📸 战报</button>
-            <button class="btn-secondary px-4" @click="showResult=false;showStats=true">📊 金库</button>
-          </div>
-          <p class="text-xs" style="color:#334155">按 <kbd class="px-1 py-0.5 rounded" style="background:rgba(255,255,255,0.1);color:#94a3b8">空格</kbd> 极速重开 · 0.5秒进入下一局</p>
-          <div class="flex items-center justify-center gap-3 mt-2 flex-wrap">
-            <label v-if="scriptedGame===0||stats.totalGames>=4" class="flex items-center gap-1 text-xs cursor-pointer" style="color:#64748b">
-              <input type="checkbox" v-model="skipAnimation" @change="saveSettings" class="accent-cyan-500"> 跳过开箱动画
-            </label>
-            <label v-if="scriptedGame===0||stats.totalGames>=4" class="flex items-center gap-1 text-xs cursor-pointer" style="color:#64748b">
-              <input type="checkbox" v-model="skipBankerDialog" @change="saveSettings" class="accent-cyan-500"> 跳过银行家废话
-            </label>
-            <p v-else class="text-xs italic" style="color:#334155">🔒 新手引导中，请完整体验剧情...</p>
           </div>
         </div>
-      </div>
-    </Teleport>
+      </Teleport>
 
-    <!-- ===== 战报海报 ===== -->
-    <Teleport to="body">
-      <div v-if="showBattleReport" class="fixed inset-0 z-[60] flex items-center justify-center p-4">
-        <div class="fixed inset-0 bg-black/85" @click="showBattleReport=false"></div>
-        <div class="relative rounded-2xl p-5 max-w-sm w-full battle-report-card" :style="shopTerminalStyle">
-          <div ref="battleReportRef" class="battle-report-inner" v-html="battleReportHtml"></div>
-          <div class="flex gap-2 mt-4">
-            <button class="btn-primary flex-1 py-2" @click="copyBattleReport">📋 复制战报</button>
-            <button class="btn-secondary px-4" @click="showBattleReport=false">关闭</button>
+      <!-- ===== 战报海报 ===== -->
+      <Teleport to="body">
+        <div v-if="showBattleReport" class="fixed inset-0 z-[60] flex items-center justify-center p-4">
+          <div class="fixed inset-0 bg-black/85" @click="showBattleReport = false"></div>
+          <div class="relative rounded-2xl p-5 max-w-sm w-full battle-report-card" :style="shopTerminalStyle">
+            <div ref="battleReportRef" class="battle-report-inner" v-html="battleReportHtml"></div>
+            <div class="flex gap-2 mt-4">
+              <button class="btn-primary flex-1 py-2" @click="copyBattleReport">📋 复制战报</button>
+              <button class="btn-secondary px-4" @click="showBattleReport = false">关闭</button>
+            </div>
           </div>
         </div>
-      </div>
-    </Teleport>
+      </Teleport>
 
-    <!-- ===== 黑市商店 ===== -->
-    <Teleport to="body">
-      <div v-if="showBlackMarket" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="fixed inset-0 bg-black/80" @click="showBlackMarket=false"></div>
-        <div class="relative rounded-2xl p-6 max-w-lg w-full bm-shop max-h-[85vh] overflow-y-auto" :style="shopTerminalStyle">
-          <h3 class="text-lg font-bold mb-1 text-center" style="color:#a78bfa">🏴‍☠️ 黑市特权卡</h3>
-          <p class="text-xs text-center mb-4" style="color:#64748b">高风险杠杆 · 后果自负</p>
-          <!-- 杠杆倍率仪表盘 -->
-          <div class="mb-4">
-            <div class="flex justify-between text-xs mb-1" style="color:#94a3b8">
-              <span>💼 £{{ formatNum(wallet) }}</span>
-              <span :style="{color: wallet<20000?'#ff4444':wallet<50000?'#ffd700':'#4ade80'}">
-                {{ wallet<20000?'⚠️ 爆仓警告':wallet<50000?'⚠️ 资金紧张':'✅ 安全区' }}
-              </span>
-            </div>
-            <div class="w-full h-2 rounded" style="background:rgba(255,255,255,0.1)">
-              <div class="h-full rounded transition-all" :style="{width: Math.min(100,wallet/200000*100)+'%', background: wallet<20000?'#ff4444':wallet<50000?'#ffd700':'#4ade80'}"></div>
-            </div>
-          </div>
-          <!-- 道具卡列表 -->
-          <div class="space-y-3">
-            <div v-for="card in BLACK_MARKET_CARDS" :key="card.id" class="bm-card" :class="{'bm-card-disabled': !canBuyCard(card)}">
-              <div class="flex gap-3">
-                <div class="text-3xl shrink-0">{{ card.icon }}</div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex justify-between items-start">
-                    <p class="text-sm font-bold" style="color:#ffd700">{{ card.name }}</p>
-                    <p class="text-xs font-bold shrink-0" style="color:#ff6b6b">£{{ formatNum(getCardCost(card)) }}</p>
-                  </div>
-                  <p class="text-xs mt-0.5" style="color:#e2e8f0">{{ card.desc }}</p>
-                  <p class="text-xs mt-0.5" style="color:#ff6b6b">⚠️ {{ card.sideEffect }}</p>
+      <!-- ===== 黑市商店 ===== -->
+      <Teleport to="body">
+        <div v-if="showBlackMarket" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div class="fixed inset-0 bg-black/80" @click="showBlackMarket = false"></div>
+          <div class="relative rounded-2xl p-6 max-w-lg w-full bm-shop max-h-[85vh] overflow-y-auto"
+            :style="shopTerminalStyle">
+            <h3 class="text-lg font-bold mb-1 text-center" style="color:#a78bfa">🏴‍☠️ 黑市特权卡</h3>
+            <p class="text-xs text-center mb-4" style="color:#64748b">高风险杠杆 · 后果自负</p>
+            <!-- 杠杆倍率仪表盘 -->
+            <div class="mb-4">
+              <div class="flex justify-between text-xs mb-1" style="color:#94a3b8">
+                <span>💼 £{{ formatNum(wallet) }}</span>
+                <span :style="{ color: wallet < 20000 ? '#ff4444' : wallet < 50000 ? '#ffd700' : '#4ade80' }">
+                  {{ wallet < 20000 ? '⚠️ 爆仓警告' : wallet < 50000 ? '⚠️ 资金紧张' : '✅ 安全区' }} </span>
+              </div>
+              <div class="w-full h-2 rounded" style="background:rgba(255,255,255,0.1)">
+                <div class="h-full rounded transition-all"
+                  :style="{ width: Math.min(100, wallet / 200000 * 100) + '%', background: wallet < 20000 ? '#ff4444' : wallet < 50000 ? '#ffd700' : '#4ade80' }">
                 </div>
               </div>
-              <button class="bm-buy-btn mt-2 w-full py-2 rounded-lg text-xs font-bold text-white"
-                :disabled="!canBuyCard(card)" @click="buyCard(card)">
-                {{ canBuyCard(card) ? '⚡ 签署契约' : (wallet<getCardCost(card)?'💸 资金不足':'🔒 不可用') }}
-              </button>
             </div>
+            <!-- 道具卡列表 -->
+            <div class="space-y-3">
+              <div v-for="card in BLACK_MARKET_CARDS" :key="card.id" class="bm-card"
+                :class="{ 'bm-card-disabled': !canBuyCard(card) }">
+                <div class="flex gap-3">
+                  <div class="text-3xl shrink-0">{{ card.icon }}</div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex justify-between items-start">
+                      <p class="text-sm font-bold" style="color:#ffd700">{{ card.name }}</p>
+                      <p class="text-xs font-bold shrink-0" style="color:#ff6b6b">£{{ formatNum(getCardCost(card)) }}
+                      </p>
+                    </div>
+                    <p class="text-xs mt-0.5" style="color:#e2e8f0">{{ card.desc }}</p>
+                    <p class="text-xs mt-0.5" style="color:#ff6b6b">⚠️ {{ card.sideEffect }}</p>
+                  </div>
+                </div>
+                <button class="bm-buy-btn mt-2 w-full py-2 rounded-lg text-xs font-bold text-white"
+                  :disabled="!canBuyCard(card)" @click="buyCard(card)">
+                  {{ canBuyCard(card) ? '⚡ 签署契约' : (wallet < getCardCost(card) ? '💸 资金不足' : '🔒 不可用') }} </button>
+              </div>
+            </div>
+            <button class="btn-sm btn-secondary w-full mt-4" @click="showBlackMarket = false">关闭黑市</button>
           </div>
-          <button class="btn-sm btn-secondary w-full mt-4" @click="showBlackMarket=false">关闭黑市</button>
         </div>
-      </div>
-    </Teleport>
+      </Teleport>
 
-    <!-- ===== 金库/统计弹窗 ===== -->
-    <Teleport to="body">
-      <div v-if="showStats" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="fixed inset-0 bg-black/70" @click="showStats=false"></div>
-        <div class="relative rounded-2xl p-6 max-w-md w-full banker-modal max-h-[85vh] overflow-y-auto" :style="shopTerminalStyle">
-          <h3 class="text-lg font-bold mb-4" style="color:#ffd700">🏦 {{ vaultName }}</h3>
-          <!-- 钱包 -->
-          <div class="rounded-lg p-2 mb-4 text-center" style="background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2)">
-            <p class="text-xs" style="color:#64748b">💼 钱包余额</p>
-            <p class="text-xl font-bold" style="color:#ffd700">£{{ formatNum(wallet) }}</p>
-          </div>
-          <!-- 黑金碎片 -->
-          <div class="rounded-lg p-2 mb-4" style="background:rgba(100,116,139,0.08);border:1px solid rgba(255,215,0,0.15)">
-            <div class="flex justify-between text-xs mb-1">
-              <span style="color:#64748b">🧩 黑金碎片</span>
-              <span style="color:#ffd700">{{ stats.blackGoldFragments || 0 }}/{{ FRAGMENT_GOAL }}</span>
+      <!-- ===== 金库/统计弹窗 ===== -->
+      <Teleport to="body">
+        <div v-if="showStats" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div class="fixed inset-0 bg-black/70" @click="showStats = false"></div>
+          <div class="relative rounded-2xl p-6 max-w-md w-full banker-modal max-h-[85vh] overflow-y-auto"
+            :style="shopTerminalStyle">
+            <h3 class="text-lg font-bold mb-4" style="color:#ffd700">🏦 {{ vaultName }}</h3>
+            <!-- 钱包 -->
+            <div class="rounded-lg p-2 mb-4 text-center"
+              style="background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2)">
+              <p class="text-xs" style="color:#64748b">💼 钱包余额</p>
+              <p class="text-xl font-bold" style="color:#ffd700">£{{ formatNum(wallet) }}</p>
             </div>
-            <div class="w-full h-2 rounded" style="background:rgba(0,0,0,0.3)">
-              <div class="h-full rounded" style="background:linear-gradient(90deg,#64748b,#ffd700)"
-                :style="{width: fragmentProgress+'%'}"></div>
+            <!-- 黑金碎片 -->
+            <div class="rounded-lg p-2 mb-4"
+              style="background:rgba(100,116,139,0.08);border:1px solid rgba(255,215,0,0.15)">
+              <div class="flex justify-between text-xs mb-1">
+                <span style="color:#64748b">🧩 黑金碎片</span>
+                <span style="color:#ffd700">{{ stats.blackGoldFragments || 0 }}/{{ FRAGMENT_GOAL }}</span>
+              </div>
+              <div class="w-full h-2 rounded" style="background:rgba(0,0,0,0.3)">
+                <div class="h-full rounded" style="background:linear-gradient(90deg,#64748b,#ffd700)"
+                  :style="{ width: fragmentProgress + '%' }"></div>
+              </div>
+              <p class="text-xs mt-1" style="color:#94a3b8">集齐解锁【🦹 暗黑银行家】皮肤 · 银行家仇恨 {{ stats.bankerHatred || 0 }}</p>
             </div>
-            <p class="text-xs mt-1" style="color:#94a3b8">集齐解锁【🦹 暗黑银行家】皮肤 · 银行家仇恨 {{ stats.bankerHatred || 0 }}</p>
-          </div>
-          <!-- 金库等级 -->
-          <div class="mb-4">
-            <div class="flex justify-between text-xs mb-1" style="color:#94a3b8">
-              <span>等级 {{ vaultLevel }}</span>
-              <span>{{ vaultPoints }}/{{ nextVaultCost }} pts</span>
+            <!-- 金库等级 -->
+            <div class="mb-4">
+              <div class="flex justify-between text-xs mb-1" style="color:#94a3b8">
+                <span>等级 {{ vaultLevel }}</span>
+                <span>{{ vaultPoints }}/{{ nextVaultCost }} pts</span>
+              </div>
+              <div class="w-full h-2 rounded" style="background:rgba(255,255,255,0.1)">
+                <div class="h-full rounded" style="background:linear-gradient(90deg,#00f0ff,#ffd700)"
+                  :style="{ width: Math.min(100, vaultPoints / nextVaultCost * 100) + '%' }"></div>
+              </div>
+              <button v-if="vaultPoints >= nextVaultCost && vaultLevel < 5" class="btn-sm btn-primary mt-2 w-full"
+                @click="upgradeVault">⬆️ 升级金库</button>
             </div>
-            <div class="w-full h-2 rounded" style="background:rgba(255,255,255,0.1)">
-              <div class="h-full rounded" style="background:linear-gradient(90deg,#00f0ff,#ffd700)"
-                :style="{width: Math.min(100,vaultPoints/nextVaultCost*100)+'%'}"></div>
+            <!-- 统计 -->
+            <div class="space-y-1.5 text-sm mb-4">
+              <div class="flex justify-between" style="color:#94a3b8"><span>总局数</span><span style="color:#00f0ff">{{
+                stats.totalGames }}</span></div>
+              <div class="flex justify-between" style="color:#94a3b8"><span>最高收益</span><span style="color:#ffd700">£{{
+                formatNum(stats.bestScore) }}</span></div>
+              <div class="flex justify-between" style="color:#94a3b8"><span>平均收益</span><span style="color:#00f0ff">£{{
+                  formatNum(avgScore) }}</span></div>
+              <div class="flex justify-between" style="color:#94a3b8"><span>总拒绝次数</span><span style="color:#ff6b6b">{{
+                stats.totalRejects }}</span></div>
             </div>
-            <button v-if="vaultPoints >= nextVaultCost && vaultLevel < 5"
-              class="btn-sm btn-primary mt-2 w-full" @click="upgradeVault">⬆️ 升级金库</button>
-          </div>
-          <!-- 统计 -->
-          <div class="space-y-1.5 text-sm mb-4">
-            <div class="flex justify-between" style="color:#94a3b8"><span>总局数</span><span style="color:#00f0ff">{{ stats.totalGames }}</span></div>
-            <div class="flex justify-between" style="color:#94a3b8"><span>最高收益</span><span style="color:#ffd700">£{{ formatNum(stats.bestScore) }}</span></div>
-            <div class="flex justify-between" style="color:#94a3b8"><span>平均收益</span><span style="color:#00f0ff">£{{ formatNum(avgScore) }}</span></div>
-            <div class="flex justify-between" style="color:#94a3b8"><span>总拒绝次数</span><span style="color:#ff6b6b">{{ stats.totalRejects }}</span></div>
-          </div>
-          <!-- 雷达图 -->
-          <div class="flex justify-center mb-4">
-            <canvas ref="radarCanvas" width="200" height="200" class="rounded-lg" style="background:rgba(0,0,0,0.3)"></canvas>
-          </div>
-          <!-- 成就 -->
-          <div class="mb-4">
-            <p class="text-xs mb-2" style="color:#64748b">🏅 成就 ({{ allAchievements.length }}/{{ totalAchievementCount }})</p>
-            <div class="flex flex-wrap gap-1">
-              <span v-for="a in allAchievements" :key="a.name"
-                :class="['game-badge', a.unlocked?'':'opacity-30']"
-                :title="a.desc">{{ a.icon }} {{ a.name }}</span>
+            <!-- 雷达图 -->
+            <div class="flex justify-center mb-4">
+              <canvas ref="radarCanvas" width="200" height="200" class="rounded-lg"
+                style="background:rgba(0,0,0,0.3)"></canvas>
             </div>
+            <!-- 成就 -->
+            <div class="mb-4">
+              <p class="text-xs mb-2" style="color:#64748b">🏅 成就 ({{ allAchievements.length }}/{{ totalAchievementCount
+                }})
+              </p>
+              <div class="flex flex-wrap gap-1">
+                <span v-for="a in allAchievements" :key="a.name" :class="['game-badge', a.unlocked ? '' : 'opacity-30']"
+                  :title="a.desc">{{ a.icon }} {{ a.name }}</span>
+              </div>
+            </div>
+            <button class="btn-sm btn-secondary w-full" @click="showStats = false">关闭</button>
           </div>
-          <button class="btn-sm btn-secondary w-full" @click="showStats=false">关闭</button>
         </div>
-      </div>
-    </Teleport>
+      </Teleport>
     </div>
   </div>
 </template>
@@ -735,103 +839,103 @@ const shopTerminalStyle = {
 // === 门票档位（残酷压榨版）===
 // 最高大奖严格控制在门票的 2.5倍 左右，让玩家时刻面临“亏损”或“微赚”的煎熬
 const TICKET_TIERS = [
-  { 
-    id: 'bronze', 
-    name: '铜牌场', 
-    icon: '', 
+  {
+    id: 'bronze',
+    name: '铜牌场',
+    icon: '',
     cost: 50000, // 门票：5万
     // 最高大奖设为 12万 (2.4倍)
     // 策略：大量1-500的“垃圾奖”，中期断层，后期只有微薄的大奖
-    amounts: [1, 5, 10, 50, 100, 250, 500, 1000, 2000, 5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000, 120000] 
+    amounts: [1, 5, 10, 50, 100, 250, 500, 1000, 2000, 5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000, 120000]
   },
-  { 
-    id: 'silver', 
-    name: '银牌场', 
-    icon: '', 
+  {
+    id: 'silver',
+    name: '银牌场',
+    icon: '',
     cost: 200000, // 门票：20万
     // 最高大奖设为 50万 (2.5倍)
     // 策略：增加了几千块的“中等奖”来迷惑玩家，但大奖依然吝啬
-    amounts: [250, 500, 1000, 2000, 5000, 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 120000, 150000, 180000, 200000, 500000] 
+    amounts: [250, 500, 1000, 2000, 5000, 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 120000, 150000, 180000, 200000, 500000]
   },
-  { 
-    id: 'gold', 
-    name: '金牌场', 
-    icon: '', 
+  {
+    id: 'gold',
+    name: '金牌场',
+    icon: '',
     cost: 800000, // 门票：80万
     // 最高大奖设为 200万 (2.5倍)
     // 策略：这里的“大奖”在前期看来是天文数字，但随着债务累积，玩家会觉得越来越不够用
-    amounts: [1000, 5000, 10000, 20000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000, 600000, 700000, 800000, 900000, 1000000, 2000000] 
+    amounts: [1000, 5000, 10000, 20000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000, 600000, 700000, 800000, 900000, 1000000, 2000000]
   },
-  { 
-    id: 'diamond', 
-    name: '钻石场', 
-    icon: '', 
+  {
+    id: 'diamond',
+    name: '钻石场',
+    icon: '',
     cost: 2000000, // 门票：200万
     // 最高大奖设为 500万 (2.5倍)
     // 策略：顶级局，每一局都是生死战，没有“躺赢”的5000万，只有残酷的2.5倍杠杆
-    amounts: [10000, 50000, 100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000, 1200000, 1500000, 1800000, 2000000, 2500000, 3000000, 4000000, 5000000] 
+    amounts: [10000, 50000, 100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000, 1200000, 1500000, 1800000, 2000000, 2500000, 3000000, 4000000, 5000000]
   }
 ];
 
 // === 金额池（全局默认，用于新手局或重置）===
 // 严格遵循“残酷压榨”逻辑，最高奖12万，门票5万
 const DEFAULT_AMOUNTS = [
-  1, 5, 10, 50, 100, 250, 500, 1000, 2000, 5000, 
+  1, 5, 10, 50, 100, 250, 500, 1000, 2000, 5000,
   10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000, 120000
 ];
 // === 黑市道具卡 ===
 const BLACK_MARKET_CARDS = [
-  { id:'wiretap', name:'窃听器', icon:'📡', cost:15000, desc:'偷听银行家底价范围', sideEffect:'若开小奖，下次报价强制打8折', maxBuy:1, condition:()=>gameState.value==='OPEN_BOXES'||gameState.value==='BANKER_OFFER' },
-  { id:'mind_disrupt', name:'精神干扰剂', icon:'💉', cost:25000, desc:'强制下次报价高于数学期望', sideEffect:'银行家识破后，后续2轮报价缩水30%', maxBuy:1, condition:()=>gameState.value==='BANKER_OFFER' },
-  { id:'ultimatum', name:'最后通牒', icon:'📜', cost:20000, desc:'强制银行家给出更高报价', sideEffect:'仅限一次，用后银行家愤怒值+50%', maxBuy:1, condition:()=>gameState.value==='BANKER_OFFER' },
-  { id:'xray', name:'透视底牌', icon:'🔍', cost:10000, desc:'偷看1-2个未开启盒子金额', sideEffect:'大奖权重降低，中等金额概率提升', maxBuy:2, condition:()=>gameState.value==='OPEN_BOXES' },
-  { id:'fate_reset', name:'命运重置', icon:'⏪', cost:30000, desc:'作废本轮结果重新抽取', sideEffect:'剩余奖池被污染，大奖替换为中下金额', maxBuy:1, condition:()=>gameState.value==='OPEN_BOXES' },
-  { id:'blind_swap', name:'盲盒对赌', icon:'🎲', cost:35000, desc:'指定任意盒子与手中盒子交换', sideEffect:'接下来2轮报价不超过£5000', maxBuy:1, condition:()=>gameState.value==='OPEN_BOXES' },
+  { id: 'wiretap', name: '窃听器', icon: '📡', cost: 15000, desc: '偷听银行家底价范围', sideEffect: '若开小奖，下次报价强制打8折', maxBuy: 1, condition: () => gameState.value === 'OPEN_BOXES' || gameState.value === 'BANKER_OFFER' },
+  { id: 'mind_disrupt', name: '精神干扰剂', icon: '💉', cost: 25000, desc: '强制下次报价高于数学期望', sideEffect: '银行家识破后，后续2轮报价缩水30%', maxBuy: 1, condition: () => gameState.value === 'BANKER_OFFER' },
+  { id: 'ultimatum', name: '最后通牒', icon: '📜', cost: 20000, desc: '强制银行家给出更高报价', sideEffect: '仅限一次，用后银行家愤怒值+50%', maxBuy: 1, condition: () => gameState.value === 'BANKER_OFFER' },
+  { id: 'xray', name: '透视底牌', icon: '🔍', cost: 10000, desc: '偷看1-2个未开启盒子金额', sideEffect: '大奖权重降低，中等金额概率提升', maxBuy: 2, condition: () => gameState.value === 'OPEN_BOXES' },
+  { id: 'fate_reset', name: '命运重置', icon: '⏪', cost: 30000, desc: '作废本轮结果重新抽取', sideEffect: '剩余奖池被污染，大奖替换为中下金额', maxBuy: 1, condition: () => gameState.value === 'OPEN_BOXES' },
+  { id: 'blind_swap', name: '盲盒对赌', icon: '🎲', cost: 35000, desc: '指定任意盒子与手中盒子交换', sideEffect: '接下来2轮报价不超过£5000', maxBuy: 1, condition: () => gameState.value === 'OPEN_BOXES' },
   // === 金融衍生品道具 ===
-  { id:'insider_trading', name:'内幕交易', icon:'💰', cost:50000, desc:'买通内线降低随机池方差', sideEffect:'系统审查风险+50%，失败则本局奖金减半', maxBuy:1, condition:()=>gameState.value==='OPEN_BOXES' },
-  { id:'debt_restructuring', name:'债务重组', icon:'📊', cost:40000, desc:'清空当前债务', sideEffect:'下一局基础利息永久翻倍', maxBuy:1, condition:()=>gameState.value==='BANKER_OFFER' && debt.value > 0 },
-  { id:'high_leverage', name:'高杠杆期权', icon:'⚡', cost:60000, desc:'以未来器官估值为抵押', sideEffect:'赢了抹平债务，输了强制平仓（生存点数-30）', maxBuy:1, condition:()=>gameState.value==='BANKER_OFFER' && abyssProtocolActive.value }
+  { id: 'insider_trading', name: '内幕交易', icon: '💰', cost: 50000, desc: '买通内线降低随机池方差', sideEffect: '系统审查风险+50%，失败则本局奖金减半', maxBuy: 1, condition: () => gameState.value === 'OPEN_BOXES' },
+  { id: 'debt_restructuring', name: '债务重组', icon: '📊', cost: 40000, desc: '清空当前债务', sideEffect: '下一局基础利息永久翻倍', maxBuy: 1, condition: () => gameState.value === 'BANKER_OFFER' && debt.value > 0 },
+  { id: 'high_leverage', name: '高杠杆期权', icon: '⚡', cost: 60000, desc: '以未来器官估值为抵押', sideEffect: '赢了抹平债务，输了强制平仓（生存点数-30）', maxBuy: 1, condition: () => gameState.value === 'BANKER_OFFER' && abyssProtocolActive.value }
 ]
 
 // === 金库等级 ===
 const VAULT_LEVELS = [
-  {name:'破旧纸箱',icon:'📦',cost:0},
-  {name:'木制保险柜',icon:'🪵',cost:500},
-  {name:'钢铁金库',icon:'🔒',cost:2000},
-  {name:'高科技金库',icon:'🏦',cost:8000},
-  {name:'赛博朋克金库',icon:'🌐',cost:25000},
-  {name:'传奇秘库',icon:'👑',cost:100000}
+  { name: '破旧纸箱', icon: '📦', cost: 0 },
+  { name: '木制保险柜', icon: '🪵', cost: 500 },
+  { name: '钢铁金库', icon: '🔒', cost: 2000 },
+  { name: '高科技金库', icon: '🏦', cost: 8000 },
+  { name: '赛博朋克金库', icon: '🌐', cost: 25000 },
+  { name: '传奇秘库', icon: '👑', cost: 100000 }
 ]
 
 // === 盒子皮肤 ===
 const ALL_SKINS = [
-  {id:'default',name:'经典',icon:'📦',minVault:0},
-  {id:'retro',name:'复古电视',icon:'📺',minVault:1},
-  {id:'blind',name:'盲盒潮玩',icon:'🎁',minVault:2},
-  {id:'globe',name:'微缩地球',icon:'🌍',minVault:3},
-  {id:'cyber',name:'赛博魔盒',icon:'💎',minVault:4},
-  {id:'dark_banker',name:'暗黑银行家',icon:'🦹',minVault:99,fragmentCost:10}
+  { id: 'default', name: '经典', icon: '📦', minVault: 0 },
+  { id: 'retro', name: '复古电视', icon: '📺', minVault: 1 },
+  { id: 'blind', name: '盲盒潮玩', icon: '🎁', minVault: 2 },
+  { id: 'globe', name: '微缩地球', icon: '🌍', minVault: 3 },
+  { id: 'cyber', name: '赛博魔盒', icon: '💎', minVault: 4 },
+  { id: 'dark_banker', name: '暗黑银行家', icon: '🦹', minVault: 99, fragmentCost: 10 }
 ]
 
 const FRAGMENT_GOAL = 10
 
 // === 成就定义 ===
 const ACHIEVEMENT_DEFS = [
-  {id:'millionaire',name:'百万富翁',icon:'💎',desc:'单局赢得£100,000+',check:(d)=>d.winAmount>=100000},
-  {id:'stubborn',name:'死磕到底',icon:'💪',desc:'拒绝所有报价直到最后',check:(d)=>d.rejectedAll&&d.round>=6},
-  {id:'lucky',name:'幸运之星',icon:'🍀',desc:'单局赢得£200,000+',check:(d)=>d.winAmount>=200000},
-  {id:'highroller',name:'高额玩家',icon:'🎰',desc:'单局赢得£50,000+',check:(d)=>d.winAmount>=50000},
-  {id:'earlybird',name:'见好就收',icon:'🐦',desc:'首轮接受报价且>£50,000',check:(d)=>d.acceptedRound1&&d.winAmount>50000},
-  {id:'ironhead',name:'铁头娃',icon:'🗿',desc:'拒绝所有报价并开出大奖',check:(d)=>d.rejectedAll&&d.winAmount>=100000},
-  {id:'comeback',name:'绝处逢生',icon:'🔥',desc:'剩3盒且最大奖还在时成功开出',check:(d)=>d.comebackWin},
-  {id:'double_win',name:'赌神',icon:'🎲',desc:'双倍对赌赢得大奖',check:(d)=>d.doubleWin},
-  {id:'ten_games',name:'常客',icon:'🎪',desc:'游玩10局',check:(d)=>d.totalGames>=10},
-  {id:'bomb_survivor',name:'黑市玩家',icon:'🏴‍☠️',desc:'使用黑市道具卡并赢得游戏',check:(d)=>d.bmCardsUsed&&d.winAmount>0},
-  {id:'hack_master',name:'杠杆大师',icon:'⚡',desc:'单局使用3张以上道具卡',check:(d)=>d.bmCardsUsed&&d.bmCardsUsed>=3},
-  {id:'all_powerups',name:'黑市VIP',icon:'💎',desc:'累计购买10张道具卡',check:(d)=>d.bmTotalCards>=10},
-  {id:'banker_contempt',name:'银行家的蔑视',icon:'😈',desc:'本局收益趋近于零',check:(d)=>d.nearZeroWin},
-  {id:'defeat_banker',name:'击败银行家',icon:'👊',desc:'在银行家愤怒时赢下大奖',check:(d)=>d.defeatedAngryBanker},
-  {id:'fragment_master',name:'碎片收藏家',icon:'🧩',desc:'收集10个黑金碎片',check:(d)=>(d.blackGoldFragments||0)>=FRAGMENT_GOAL}
+  { id: 'millionaire', name: '百万富翁', icon: '💎', desc: '单局赢得£100,000+', check: (d) => d.winAmount >= 100000 },
+  { id: 'stubborn', name: '死磕到底', icon: '💪', desc: '拒绝所有报价直到最后', check: (d) => d.rejectedAll && d.round >= 6 },
+  { id: 'lucky', name: '幸运之星', icon: '🍀', desc: '单局赢得£200,000+', check: (d) => d.winAmount >= 200000 },
+  { id: 'highroller', name: '高额玩家', icon: '🎰', desc: '单局赢得£50,000+', check: (d) => d.winAmount >= 50000 },
+  { id: 'earlybird', name: '见好就收', icon: '🐦', desc: '首轮接受报价且>£50,000', check: (d) => d.acceptedRound1 && d.winAmount > 50000 },
+  { id: 'ironhead', name: '铁头娃', icon: '🗿', desc: '拒绝所有报价并开出大奖', check: (d) => d.rejectedAll && d.winAmount >= 100000 },
+  { id: 'comeback', name: '绝处逢生', icon: '🔥', desc: '剩3盒且最大奖还在时成功开出', check: (d) => d.comebackWin },
+  { id: 'double_win', name: '赌神', icon: '🎲', desc: '双倍对赌赢得大奖', check: (d) => d.doubleWin },
+  { id: 'ten_games', name: '常客', icon: '🎪', desc: '游玩10局', check: (d) => d.totalGames >= 10 },
+  { id: 'bomb_survivor', name: '黑市玩家', icon: '🏴‍☠️', desc: '使用黑市道具卡并赢得游戏', check: (d) => d.bmCardsUsed && d.winAmount > 0 },
+  { id: 'hack_master', name: '杠杆大师', icon: '⚡', desc: '单局使用3张以上道具卡', check: (d) => d.bmCardsUsed && d.bmCardsUsed >= 3 },
+  { id: 'all_powerups', name: '黑市VIP', icon: '💎', desc: '累计购买10张道具卡', check: (d) => d.bmTotalCards >= 10 },
+  { id: 'banker_contempt', name: '银行家的蔑视', icon: '😈', desc: '本局收益趋近于零', check: (d) => d.nearZeroWin },
+  { id: 'defeat_banker', name: '击败银行家', icon: '👊', desc: '在银行家愤怒时赢下大奖', check: (d) => d.defeatedAngryBanker },
+  { id: 'fragment_master', name: '碎片收藏家', icon: '🧩', desc: '收集10个黑金碎片', check: (d) => (d.blackGoldFragments || 0) >= FRAGMENT_GOAL }
 ]
 
 // === 游戏状态 ===
@@ -942,14 +1046,21 @@ const spotlightOn = ref(false)
 const bankerStampTarget = ref(-1)
 const shatterEffect = ref(false)
 const goldParticles = ref(false)
-const longPressProgress = ref(0)
 const longPressBoxId = ref(-1)
-let longPressTimer = null
+const longPressProgress = ref(0)
 const LONG_PRESS_TICK_MS = 25
 const NO_DEAL_LONG_PRESS_MS = 900
-const BOX_OPEN_LONG_PRESS_MS = 800
-const boxLongPressHint = ref('')
-let boxHintTimer = null
+const BOX_OPEN_DURATION_MS = 1000
+const BOX_OPEN_TICK_MS = 25
+let longPressTimer = null
+let boxOpenTimer = null
+
+function progressColor(box) {
+  const maxA = Math.max(...currentAmounts, 1)
+  if (box.amount >= maxA * 0.5) return '#ffd700'
+  if (box.amount >= maxA * 0.1) return '#00f0ff'
+  return '#94a3b8'
+}
 const travelDist = ref(800)
 const myBoxRevealText = ref('')
 const myBoxRevealStyle = ref({})
@@ -1018,14 +1129,14 @@ const bankerReluctant = ref(false) // 银行家不情愿动画
 
 // 统计数据
 const stats = ref({
-  totalGames:0, bestScore:0, totalScore:0, totalRejects:0,
-  achievements:[], vaultPoints:0, vaultLevel:0,
-  totalAccepts:0, totalEarlyAccepts:0, gamesData:[],
-  wallet:100000,
-  blackGoldFragments:0, totalNetLoss:0, bankerHatred:0
+  totalGames: 0, bestScore: 0, totalScore: 0, totalRejects: 0,
+  achievements: [], vaultPoints: 0, vaultLevel: 0,
+  totalAccepts: 0, totalEarlyAccepts: 0, gamesData: [],
+  wallet: 100000,
+  blackGoldFragments: 0, totalNetLoss: 0, bankerHatred: 0
 })
 
-const roundBoxCounts = [5,3,3,3,2,1]
+const roundBoxCounts = [5, 3, 3, 3, 2, 1]
 
 // ===== 打字机效果 =====
 function startTypewriter(text, speed = 50) {
@@ -1043,25 +1154,25 @@ function clearTypewriter() { clearInterval(typewriterInterval); typewriterText.v
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)] }
 
 const DM_SMALL = [
-  '反向抽卡！小奖出尽，大奖必在盒中！','稳了稳了！场上小钱都被你排除了！',
-  '《关于我运气极差，但离25万越来越近》','这波是精准排雷！银行家在冒冷汗',
-  '1镑？不，这是通往25万镑的入场券！','别慌！下一个不是大奖就是大奖！',
-  '非酋の逆袭！概率在向你微笑！','排除法大师！大奖正在向你招手'
+  '反向抽卡！小奖出尽，大奖必在盒中！', '稳了稳了！场上小钱都被你排除了！',
+  '《关于我运气极差，但离25万越来越近》', '这波是精准排雷！银行家在冒冷汗',
+  '1镑？不，这是通往25万镑的入场券！', '别慌！下一个不是大奖就是大奖！',
+  '非酋の逆袭！概率在向你微笑！', '排除法大师！大奖正在向你招手'
 ]
 const DM_BIG = [
-  '痛失大奖！亲手把大奖送走了！','完了完了，大奖被排除了...','你这手气，不去当散财童子可惜了',
-  '银行家：谢谢老板，稳赚不赔！','大奖没了，只能祈祷手里不是那1镑','太可惜了！刚才那个报价其实挺香的',
-  '心碎了...那是我的梦想数字啊','欧皇陨落！大奖永远地离开了'
+  '痛失大奖！亲手把大奖送走了！', '完了完了，大奖被排除了...', '你这手气，不去当散财童子可惜了',
+  '银行家：谢谢老板，稳赚不赔！', '大奖没了，只能祈祷手里不是那1镑', '太可惜了！刚才那个报价其实挺香的',
+  '心碎了...那是我的梦想数字啊', '欧皇陨落！大奖永远地离开了'
 ]
 const DM_MID = [
-  '薛定谔的盒子：既是1镑也是25万！','不上不下，最搞心态！','稳住，大奖还在场上！',
-  '不亏不赚，就看下一轮了','银行家：我也拿不准了','中庸之道？这可不是中庸的时候',
-  '这波是五五开，全看下一手','紧张刺激！这才是真正的博弈'
+  '薛定谔的盒子：既是1镑也是25万！', '不上不下，最搞心态！', '稳住，大奖还在场上！',
+  '不亏不赚，就看下一轮了', '银行家：我也拿不准了', '中庸之道？这可不是中庸的时候',
+  '这波是五五开，全看下一手', '紧张刺激！这才是真正的博弈'
 ]
 const DM_FINAL = [
-  '50%的概率！信玄学还是信数学？！','别换！千万别换！第一直觉才是真理',
-  '换！换！换！大奖在对面！','深呼吸，闭上眼睛，按下去！',
-  '见证奇迹的时刻到了！！','手心都是汗了...','命运的十字路口！',
+  '50%的概率！信玄学还是信数学？！', '别换！千万别换！第一直觉才是真理',
+  '换！换！换！大奖在对面！', '深呼吸，闭上眼睛，按下去！',
+  '见证奇迹的时刻到了！！', '手心都是汗了...', '命运的十字路口！',
   '这将是载入史册的一刻！'
 ]
 
@@ -1146,21 +1257,26 @@ const DM_INSIDER = [ // 神秘的"内幕爆料者"：致命毒药
 ]
 
 const DM_BANKER_TAUNT = [
-  '弹幕：银行家急了！','弹幕：血赚！继续！','弹幕：大奖必在盒中！别卖！',
-  '弹幕：别听银行家的！','弹幕：拒绝！拒绝！拒绝！'
+  '弹幕：银行家急了！', '弹幕：血赚！继续！', '弹幕：大奖必在盒中！别卖！',
+  '弹幕：别听银行家的！', '弹幕：拒绝！拒绝！拒绝！'
 ]
 const DM_DEAL = [
-  '落袋为安！稳！','明智的止损！见好就收','恭喜逃离地狱！',
-  '安全着陆！','这笔钱真香','不贪心，是个狠人！'
+  '落袋为安！稳！', '明智的止损！见好就收', '恭喜逃离地狱！',
+  '安全着陆！', '这笔钱真香', '不贪心，是个狠人！'
 ]
 const DM_NODEAL = [
-  '冲冲冲！拒绝得好！','勇士！敢拒绝银行家','不怂！这才是真玩家',
-  '豪赌！心脏够大','他疯了！他居然拒绝了','这是赌神的魄力还是赌徒的执念？'
+  '冲冲冲！拒绝得好！', '勇士！敢拒绝银行家', '不怂！这才是真玩家',
+  '豪赌！心脏够大', '他疯了！他居然拒绝了', '这是赌神的魄力还是赌徒的执念？'
 ]
 
 function spawnDanmaku(category, count = 3, customTexts = null) {
+  // 【新增】拦截第一幕（造神局）的结算弹幕
+  // 只有在第一幕且不是系统强制消息时，屏蔽弹幕
+  if (scriptedGame.value === 1 && category !== 'system') {
+    return; // 直接返回，不显示任何弹幕
+  }
   let pool
-  switch(category) {
+  switch (category) {
     case 'small': pool = DM_SMALL; break; case 'big': pool = DM_BIG; break;
     case 'mid': pool = DM_MID; break; case 'final': pool = DM_FINAL; break;
     case 'banker_taunt': pool = DM_BANKER_TAUNT; break;
@@ -1168,37 +1284,37 @@ function spawnDanmaku(category, count = 3, customTexts = null) {
     case 'custom': pool = customTexts || DM_MID; break;
     default: pool = DM_MID
   }
-  
+
   // 根据情绪状态混入不同人设弹幕
   const anxiety = emotionValue.value
   const remaining = remainingBoxes.value.length
-  
+
   // 高焦虑（恐慌）：混入绝望前任 + 阴阳怪气乐子人
   if (anxiety >= 70 && category !== 'deal') {
     pool = [...pool, ...DM_EX.slice(0, 3), ...DM_TROLL.slice(0, 2)]
-  } 
+  }
   // 低焦虑（自信）：混入狂热造神者
   else if (anxiety <= 30 && category !== 'deal') {
     pool = [...pool, ...DM_GODMAKER.slice(0, 3)]
   }
-  
+
   // 关键决策时刻（只剩少量盒子）：混入冷血数学家 + 神秘内幕者
   if (remaining <= 4 && category !== 'deal') {
     pool = [...pool, ...DM_MATHEMATICIAN.slice(0, 2), ...DM_INSIDER.slice(0, 2)]
   }
-  
+
   // 暴躁指令狂：随机混入
   if (Math.random() > 0.7 && category !== 'deal') {
     pool = [...pool, ...DM_COMMANDER.slice(0, 1)]
   }
-  
+
   const used = new Set()
   for (let i = 0; i < count && i < pool.length; i++) {
     let idx; do { idx = Math.floor(Math.random() * pool.length) } while (used.has(idx) && used.size < pool.length); used.add(idx)
     const speed = 10 + Math.random() * 8 // 放慢两倍
     const currentId = danmakuId++
     const text = pool[idx]
-    
+
     // 根据人设设置不同颜色
     let color = '#94a3b8'
     if (DM_GODMAKER.includes(text)) {
@@ -1224,7 +1340,7 @@ function spawnDanmaku(category, count = 3, customTexts = null) {
     } else if (category === 'nodeal') {
       color = '#ff6b6b'
     }
-    
+
     danmakuItems.value.push({
       id: currentId, text: text,
       color: color,
@@ -1260,18 +1376,18 @@ const isInDecisionMode = ref(false)
 function startDecisionStorm() {
   if (isInDecisionMode.value) return
   isInDecisionMode.value = true
-  
+
   // 快速生成大量弹幕，形成弹幕风暴
   const stormInterval = setInterval(() => {
     if (!isInDecisionMode.value) {
       clearInterval(stormInterval)
       return
     }
-    
+
     // 左右互搏：左侧偏向激进（造神者+指令狂），右侧偏向保守（数学家+前任）
     const leftPool = [...DM_GODMAKER, ...DM_COMMANDER, ...DM_INSIDER]
     const rightPool = [...DM_MATHEMATICIAN, ...DM_EX, ...DM_TROLL]
-    
+
     // 左侧弹幕（支持No Deal）
     const leftText = leftPool[Math.floor(Math.random() * leftPool.length)]
     danmakuItems.value.push({
@@ -1283,7 +1399,7 @@ function startDecisionStorm() {
       direction: 'left',
       danmakuType: getDanmakuType(leftText)
     })
-    
+
     // 右侧弹幕（支持Deal）
     const rightText = rightPool[Math.floor(Math.random() * rightPool.length)]
     danmakuItems.value.push({
@@ -1295,9 +1411,9 @@ function startDecisionStorm() {
       direction: 'right',
       danmakuType: getDanmakuType(rightText)
     })
-    
+
   }, 200) // 每200ms生成一对弹幕
-  
+
   // 3秒后停止风暴
   setTimeout(() => {
     isInDecisionMode.value = false
@@ -1327,7 +1443,7 @@ function getCurrentPhase() {
   const survival = survivalPoints.value
   const losses = consecutiveLosses.value
   const wins = consecutiveWins.value
-  
+
   // 深渊期：债务复利飙升，生存点数 <= 30
   if (abyssProtocolActive.value && survival <= 30) {
     return 'abyss'
@@ -1342,8 +1458,8 @@ function getCurrentPhase() {
 
 function spawnPhaseDanmaku() {
   const phase = getCurrentPhase()
-  
-  switch(phase) {
+
+  switch (phase) {
     case 'good':
       // 新手/顺风期：【造神者】70%，【指令狂】30%
       spawnDanmakuByWeight([
@@ -1377,7 +1493,7 @@ function spawnPhaseDanmaku() {
 
 function spawnDanmakuByWeight(weights, totalCount) {
   let allDanmakus = []
-  
+
   weights.forEach(w => {
     const count = Math.floor((w.weight / 100) * totalCount)
     for (let i = 0; i < count; i++) {
@@ -1385,15 +1501,15 @@ function spawnDanmakuByWeight(weights, totalCount) {
       allDanmakus.push({ text: w.pool[idx], type: getDanmakuType(w.pool[idx]) })
     }
   })
-  
+
   // 打乱顺序
   allDanmakus.sort(() => Math.random() - 0.5)
-  
+
   allDanmakus.forEach((dm, i) => {
     setTimeout(() => {
       const speed = 8 + Math.random() * 6
       const currentId = danmakuId++
-      
+
       let color = '#94a3b8'
       if (DM_GODMAKER.includes(dm.text)) color = '#4ade80'
       else if (DM_MATHEMATICIAN.includes(dm.text)) color = '#00f0ff'
@@ -1401,7 +1517,7 @@ function spawnDanmakuByWeight(weights, totalCount) {
       else if (DM_EX.includes(dm.text)) color = '#8b5cf6'
       else if (DM_COMMANDER.includes(dm.text)) color = '#f59e0b'
       else if (DM_INSIDER.includes(dm.text)) color = '#ec4899'
-      
+
       danmakuItems.value.push({
         id: currentId,
         text: dm.text,
@@ -1411,7 +1527,7 @@ function spawnDanmakuByWeight(weights, totalCount) {
         danmakuType: dm.type
       })
       recordDanmaku(dm.text)
-      
+
       setTimeout(() => {
         const index = danmakuItems.value.findIndex(d => d.id === currentId)
         if (index !== -1) danmakuItems.value.splice(index, 1)
@@ -1425,12 +1541,12 @@ function onDealHover() {
   // 悬停Deal按钮：触发反对卖的弹幕
   const pool = [...DM_GODMAKER.slice(0, 2), ...DM_COMMANDER.slice(0, 1)]
   const text = pool[Math.floor(Math.random() * pool.length)]
-  
+
   const speed = 5 + Math.random() * 3
   const currentId = danmakuId++
-  
+
   let color = DM_GODMAKER.includes(text) ? '#4ade80' : '#f59e0b'
-  
+
   danmakuItems.value.push({
     id: currentId,
     text: text,
@@ -1441,7 +1557,7 @@ function onDealHover() {
     danmakuType: getDanmakuType(text)
   })
   recordDanmaku(text)
-  
+
   setTimeout(() => {
     const index = danmakuItems.value.findIndex(d => d.id === currentId)
     if (index !== -1) danmakuItems.value.splice(index, 1)
@@ -1452,15 +1568,15 @@ function onNoDealHover() {
   // 悬停NoDeal按钮：触发送跑/嘲讽弹幕
   const pool = [...DM_EX.slice(0, 2), ...DM_TROLL.slice(0, 2), ...DM_MATHEMATICIAN.slice(0, 1)]
   const text = pool[Math.floor(Math.random() * pool.length)]
-  
+
   const speed = 5 + Math.random() * 3
   const currentId = danmakuId++
-  
+
   let color = '#94a3b8'
   if (DM_EX.includes(text)) color = '#8b5cf6'
   else if (DM_TROLL.includes(text)) color = '#ff6b6b'
   else if (DM_MATHEMATICIAN.includes(text)) color = '#00f0ff'
-  
+
   danmakuItems.value.push({
     id: currentId,
     text: text,
@@ -1471,7 +1587,7 @@ function onNoDealHover() {
     danmakuType: getDanmakuType(text)
   })
   recordDanmaku(text)
-  
+
   setTimeout(() => {
     const index = danmakuItems.value.findIndex(d => d.id === currentId)
     if (index !== -1) danmakuItems.value.splice(index, 1)
@@ -1482,12 +1598,12 @@ function onShopHover(itemName) {
   // 悬停商店道具
   const pool = [...DM_INSIDER.slice(0, 2), ...DM_EX.slice(0, 1), ...DM_COMMANDER.slice(0, 1)]
   const text = pool[Math.floor(Math.random() * pool.length)]
-  
+
   const speed = 5 + Math.random() * 3
   const currentId = danmakuId++
-  
+
   let color = DM_INSIDER.includes(text) ? '#ec4899' : DM_EX.includes(text) ? '#8b5cf6' : '#f59e0b'
-  
+
   danmakuItems.value.push({
     id: currentId,
     text: text,
@@ -1497,7 +1613,7 @@ function onShopHover(itemName) {
     danmakuType: getDanmakuType(text)
   })
   recordDanmaku(text)
-  
+
   setTimeout(() => {
     const index = danmakuItems.value.findIndex(d => d.id === currentId)
     if (index !== -1) danmakuItems.value.splice(index, 1)
@@ -1519,16 +1635,42 @@ function triggerOutcomeDanmaku(isBigWin, isDeal) {
 }
 
 function triggerBigWinDanmaku() {
+  // 如果是第一幕（造神局），只显示特定的造神弹幕，且数量减少
+  if (scriptedGame.value === 1) {
+    const count = 5; // 只显示 5 条
+    const pool = DM_GODMAKER; // 只用造神者语录
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => {
+        const idx = Math.floor(Math.random() * pool.length)
+        const text = pool[idx]
+        const currentId = danmakuId++
+        danmakuItems.value.push({
+          id: currentId,
+          text: text,
+          color: '#ffd700', // 金色
+          top: 10 + Math.random() * 180,
+          speed: 3 + Math.random() * 4,
+          danmakuType: 'godmaker'
+        })
+        recordDanmaku(text)
+        setTimeout(() => {
+          const index = danmakuItems.value.findIndex(d => d.id === currentId)
+          if (index !== -1) danmakuItems.value.splice(index, 1)
+        }, 5000)
+      }, i * 80)
+    }
+    return; // 退出，不执行下面的默认逻辑
+  }
   // 瞬间触发20+条【造神者】弹幕，金色效果
   const count = 20 + Math.floor(Math.random() * 10)
   const pool = DM_GODMAKER
-  
+
   for (let i = 0; i < count; i++) {
     setTimeout(() => {
       const idx = Math.floor(Math.random() * pool.length)
       const text = pool[idx]
       const currentId = danmakuId++
-      
+
       danmakuItems.value.push({
         id: currentId,
         text: text,
@@ -1538,7 +1680,7 @@ function triggerBigWinDanmaku() {
         danmakuType: 'godmaker'
       })
       recordDanmaku(text)
-      
+
       setTimeout(() => {
         const index = danmakuItems.value.findIndex(d => d.id === currentId)
         if (index !== -1) danmakuItems.value.splice(index, 1)
@@ -1548,18 +1690,23 @@ function triggerBigWinDanmaku() {
 }
 
 function triggerSmallWinDanmaku() {
+  // 第一局不会出现 SmallWin，但为了防止意外，还是加个限制
+  if (scriptedGame.value === 1) {
+    return;
+  }
+
   // 瞬间触发10+条【乐子人】和【数学家】弹幕
   const count = 10 + Math.floor(Math.random() * 5)
   const pool = [...DM_TROLL, ...DM_MATHEMATICIAN]
-  
+
   for (let i = 0; i < count; i++) {
     setTimeout(() => {
       const idx = Math.floor(Math.random() * pool.length)
       const text = pool[idx]
       const currentId = danmakuId++
-      
+
       const color = DM_TROLL.includes(text) ? '#8b8b8b' : '#6b7280' // 灰暗冷色
-      
+
       danmakuItems.value.push({
         id: currentId,
         text: text,
@@ -1569,12 +1716,12 @@ function triggerSmallWinDanmaku() {
         danmakuType: getDanmakuType(text)
       })
       recordDanmaku(text)
-      
+
       // 触发阿特拉斯处刑
       if (i === Math.floor(count / 2)) {
         triggerAtlasExecution()
       }
-      
+
       setTimeout(() => {
         const index = danmakuItems.value.findIndex(d => d.id === currentId)
         if (index !== -1) danmakuItems.value.splice(index, 1)
@@ -1584,21 +1731,52 @@ function triggerSmallWinDanmaku() {
 }
 
 function triggerDealDanmaku() {
+  // 第一局特殊处理
+  if (scriptedGame.value === 1) {
+    const pool = [...DM_GODMAKER.slice(0, 3), ...DM_COMMANDER.slice(0, 2)]
+    const count = 5 + Math.floor(Math.random() * 3)
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => {
+        const idx = Math.floor(Math.random() * pool.length)
+        const text = pool[idx]
+        const currentId = danmakuId++
+        let color = '#94a3b8'
+        if (DM_GODMAKER.includes(text)) color = '#4ade80'
+        else if (DM_COMMANDER.includes(text)) color = '#f59e0b'
+
+        danmakuItems.value.push({
+          id: currentId,
+          text: text,
+          color: color,
+          top: 10 + Math.random() * 180,
+          speed: 6 + Math.random() * 4,
+          danmakuType: getDanmakuType(text)
+        })
+        recordDanmaku(text)
+        setTimeout(() => {
+          const index = danmakuItems.value.findIndex(d => d.id === currentId)
+          if (index !== -1) danmakuItems.value.splice(index, 1)
+        }, 6000)
+      }, i * 200)
+    }
+    return;
+  }
+
   // 触发平行宇宙复盘弹幕
   const pool = [...DM_TROLL.slice(0, 3), ...DM_EX.slice(0, 2), ...DM_MATHEMATICIAN.slice(0, 2)]
   const count = 5 + Math.floor(Math.random() * 3)
-  
+
   for (let i = 0; i < count; i++) {
     setTimeout(() => {
       const idx = Math.floor(Math.random() * pool.length)
       const text = pool[idx]
       const currentId = danmakuId++
-      
+
       let color = '#94a3b8'
       if (DM_TROLL.includes(text)) color = '#ff6b6b'
       else if (DM_EX.includes(text)) color = '#8b5cf6'
       else if (DM_MATHEMATICIAN.includes(text)) color = '#00f0ff'
-      
+
       danmakuItems.value.push({
         id: currentId,
         text: text,
@@ -1608,7 +1786,7 @@ function triggerDealDanmaku() {
         danmakuType: getDanmakuType(text)
       })
       recordDanmaku(text)
-      
+
       setTimeout(() => {
         const index = danmakuItems.value.findIndex(d => d.id === currentId)
         if (index !== -1) danmakuItems.value.splice(index, 1)
@@ -1621,7 +1799,7 @@ function triggerDealDanmaku() {
 function triggerAtlasExecution() {
   // 找到最近的造神者弹幕（导致玩家失败的那条）
   const godmakerDanmaku = recentDanmakus.value.find(d => d.type === 'godmaker')
-  
+
   if (godmakerDanmaku) {
     // 创建处刑弹幕 - 放大3倍、置顶、高亮
     const currentId = danmakuId++
@@ -1634,19 +1812,19 @@ function triggerAtlasExecution() {
       danmakuType: 'godmaker',
       isExecution: true
     })
-    
+
     // 2秒后碎裂效果
     setTimeout(() => {
       const index = danmakuItems.value.findIndex(d => d.id === currentId)
       if (index !== -1) {
         danmakuItems.value[index].shatter = true
       }
-      
+
       // AI银行家发话
       bankerMessage.value = '你的信仰，不值一提。'
       bankerEmoji.value = '💀'
       bankerMood.value = 'panic'
-      
+
       setTimeout(() => {
         const idx = danmakuItems.value.findIndex(d => d.id === currentId)
         if (idx !== -1) danmakuItems.value.splice(idx, 1)
@@ -1707,7 +1885,7 @@ function startTutorial() {
   showStartScreen.value = false
   tutorialPhase.value = 0
   tutorialComplete.value = false
-  
+
   // 播放开场动画
   playOpeningAnimation()
 }
@@ -1723,9 +1901,9 @@ function playOpeningAnimation() {
     '> CONTRACT: LIFE_RENUNCIATION_v2.0',
     '> WELCOME TO THE ABYSS...'
   ]
-  
+
   let lineIndex = 0
-  
+
   const typeInterval = setInterval(() => {
     if (lineIndex >= codeLines.length) {
       clearInterval(typeInterval)
@@ -1736,11 +1914,11 @@ function playOpeningAnimation() {
       }, 1000)
       return
     }
-    
+
     const line = codeLines[lineIndex]
     typewriterIndex = 0
     terminalLines.value.push({ text: '', complete: false })
-    
+
     const charInterval = setInterval(() => {
       if (typewriterIndex >= line.length) {
         clearInterval(charInterval)
@@ -1762,16 +1940,16 @@ function startTutorialDialog(phase, onComplete) {
     return
   }
   let index = 0
-  
+
   const playNext = () => {
     if (index >= dialogs.length) {
       if (onComplete) onComplete()
       else finishTutorialPhase()
       return
     }
-    
+
     const dialog = dialogs[index]
-    
+
     if (dialog.speaker === 'atlas') {
       bankerMessage.value = dialog.text
       bankerEmoji.value = '👁️'
@@ -1779,11 +1957,11 @@ function startTutorialDialog(phase, onComplete) {
     } else if (dialog.speaker === 'system') {
       terminalLines.value.push({ text: dialog.text, complete: true, isSystem: true })
     }
-    
+
     index++
     setTimeout(playNext, dialog.delay)
   }
-  
+
   playNext()
 }
 
@@ -1821,13 +1999,13 @@ function triggerTutorialPunishment() {
       isExecution: true,
       tutorialPunish: true
     })
-    
+
     setTimeout(() => {
       const index = danmakuItems.value.findIndex(d => d.id === currentId)
       if (index !== -1) {
         danmakuItems.value[index].shatter = true
       }
-      
+
       // AI补刀
       setTimeout(() => {
         startTutorialDialog('phase1_punish', () => {
@@ -1930,7 +2108,7 @@ function saveTutorialState() {
       tutorialPhase: tutorialPhase.value,
       isNewPlayer: isNewPlayer.value
     }))
-  } catch (e) {}
+  } catch (e) { }
 }
 
 function loadTutorialState() {
@@ -1942,7 +2120,7 @@ function loadTutorialState() {
     if (d.tutorialPhase !== undefined) tutorialPhase.value = d.tutorialPhase
     if (d.isNewPlayer !== undefined) isNewPlayer.value = d.isNewPlayer
     if (d.tutorialComplete) abyssProtocolActive.value = true
-  } catch (e) {}
+  } catch (e) { }
 }
 
 // 反弹幕任务：连续5秒无视弹幕
@@ -1950,15 +2128,15 @@ function startIgnoreDanmakuTask() {
   isIgnoringDanmaku.value = true
   ignoreDanmakuCountdown.value = 5
   startTutorialDialog('phase3')
-  
+
   const countdownInterval = setInterval(() => {
     if (!isIgnoringDanmaku.value) {
       clearInterval(countdownInterval)
       return
     }
-    
+
     ignoreDanmakuCountdown.value--
-    
+
     if (ignoreDanmakuCountdown.value <= 0) {
       clearInterval(countdownInterval)
       // 任务完成
@@ -1974,7 +2152,7 @@ function finishIgnoreDanmakuTask() {
   danmakuItems.value.forEach(dm => {
     dm.shatter = true
   })
-  
+
   setTimeout(() => {
     danmakuItems.value = []
     // 播放成功对话
@@ -1986,7 +2164,7 @@ function finishIgnoreDanmakuTask() {
 let lastMouseMoveTime = 0
 function trackDanmakuIgnoring() {
   if (!isIgnoringDanmaku.value) return
-  
+
   const now = Date.now()
   if (now - lastMouseMoveTime > 500) {
     // 玩家有一段时间没动了，继续倒计时
@@ -1999,26 +2177,26 @@ function triggerForcedCollection() {
   gameState.value = 'COLLECTION'
   showResult.value = false
   vignetteActive.value = true
-  
+
   // 播放催收警告动画
   setTimeout(() => {
     bankerMessage.value = '警告：生存点数归零'
     bankerEmoji.value = '🔴'
     bankerMood.value = 'panic'
   }, 500)
-  
+
   setTimeout(() => {
     bankerMessage.value = '深渊资本执行《生命让渡协议》'
     bankerEmoji.value = '⚖️'
   }, 1500)
-  
+
   setTimeout(() => {
     bankerMessage.value = '强制回收程序启动...'
     bankerEmoji.value = '💀'
     // 触发屏幕特效
     document.querySelector('.game-container')?.classList.add('collection-effect')
   }, 2500)
-  
+
   setTimeout(() => {
     // 游戏结束，重置状态
     debt.value = 0
@@ -2045,19 +2223,19 @@ const executingDanmaku = ref(null) // 当前正在处刑的弹幕
 
 function executeDanmaku() {
   if (recentDanmakus.value.length === 0) return
-  
+
   // 随机选择一条最近的弹幕进行处刑
   const target = recentDanmakus.value[Math.floor(Math.random() * recentDanmakus.value.length)]
   executingDanmaku.value = target
-  
+
   // 银行家引用弹幕嘲讽
   bankerMessage.value = `正如这位观众所说："${target.text}"`
   bankerEmoji.value = '😏'
   bankerMood.value = 'angry'
-  
+
   // 高亮并碎裂效果
   playSound('stamp')
-  
+
   setTimeout(() => {
     executingDanmaku.value = null
     recentDanmakus.value = [] // 清空记录
@@ -2093,61 +2271,61 @@ function generateBankerDialogue() {
     cat = 'bluff'
   } else if (consecutiveRejects.value >= 2 && highRatio > 0.3) {
     cat = 'mock_confident'
-  } else if (rejectHistory.value.length >= 2 && boxes.value.filter(b=>b.opened&&b.eliminated).some(b=>b.amount>=maxAmt*0.3)) {
+  } else if (rejectHistory.value.length >= 2 && boxes.value.filter(b => b.opened && b.eliminated).some(b => b.amount >= maxAmt * 0.3)) {
     cat = 'mock_greedy'
   } else if (stats.value.totalAccepts > stats.value.totalRejects && stats.value.totalGames > 2) {
     cat = 'mock_coward'
   }
 
   let line = ''
-  switch(cat) {
+  switch (cat) {
     case 'early_tempt':
       line = pick([
         '这笔钱足够你买辆新车了。何必继续冒险？见好就收吧。',
         '你手里的盒子现在看起来像宝藏。但再开错一个，它就变成石头了。',
         '别被贪婪蒙蔽了双眼。根据我的计算，你手里的东西大概率不值这个价。'
-      ]); bankerMood.value='neutral'; bankerEmoji.value='🧐'; break
+      ]); bankerMood.value = 'neutral'; bankerEmoji.value = '🧐'; break
     case 'pressure':
       line = pick([
         '幸运女神今天没站在你这边。拿上这点零花钱，体面地结束吧。',
         '你的盒子像个定时炸弹。聪明人知道什么时候该止损。',
         '我很同情你，但我是生意人。这是底线，再开一个我可能直接挂断电话。'
-      ]); bankerMood.value='angry'; bankerEmoji.value='😡'; break
+      ]); bankerMood.value = 'angry'; bankerEmoji.value = '😡'; break
     case 'bluff':
       line = pick([
         '别以为运气好就能赢走我的钱。你手里的盒子未必是最大的。',
         '下一轮只要开出那个大奖，你的美梦就碎了。这个报价是你最后的安全网。',
         '你看起来像个赌徒，但我不觉得你有赌徒的胆量。敢不敢拒绝我？'
-      ]); bankerMood.value='neutral'; bankerEmoji.value='😏'; break
+      ]); bankerMood.value = 'neutral'; bankerEmoji.value = '😏'; break
     case 'endgame':
       line = pick([
         '一半是天堂，一半是地狱。你手里的盒子，是钥匙还是深渊的门票？选吧。',
         '我的耐心有限。10秒后报价作废。Deal... or No Deal？',
         '你一路走到这里，证明你不是胆小鬼。现在证明给我看。'
-      ]); bankerMood.value='neutral'; bankerEmoji.value='🎭'; break
+      ]); bankerMood.value = 'neutral'; bankerEmoji.value = '🎭'; break
     case 'mock_confident':
       line = pick([
         '呵，拒绝？你的勇气值得赞赏，但你的数学是体育老师教的吗？',
         '贪婪是原罪。幸运女神不会一直对你抛媚眼，等会儿可别哭太大声。',
         '我见过太多自以为是的赌徒。拿着钱去买杯咖啡清醒一下吧。'
-      ]); bankerMood.value='angry'; bankerEmoji.value='😤'; break
+      ]); bankerMood.value = 'angry'; bankerEmoji.value = '😤'; break
     case 'mock_greedy':
       line = pick([
         '看看你刚才错过了什么？现在你的盒子只够买我刚才报价的零头。后悔吗？',
         '你的操作实在太"精彩"了。这个报价是对你智商的补偿，赶紧拿钱走人。',
         '你刚才按No Deal的时候，手指是不是在发抖？别挣扎了。'
-      ]); bankerMood.value='angry'; bankerEmoji.value='😈'; break
+      ]); bankerMood.value = 'angry'; bankerEmoji.value = '😈'; break
     case 'mock_coward':
       line = pick([
         '又来了？你玩游戏像个70岁老头过马路。你的胆子是被狗吃了吗？',
         '我甚至不需要看你的盒子，就知道你一定选Deal。你是来领低保的。',
         '拿着这笔钱去给猫买个罐头吧。大奖是留给有胆量的人的。'
-      ]); bankerMood.value='neutral'; bankerEmoji.value='🙄'; break
+      ]); bankerMood.value = 'neutral'; bankerEmoji.value = '🙄'; break
     default:
       line = pick([
-        '这是我的报价，你自己决定。','机会不等人哦...想好了再做决定。',
-        '命运掌握在你手中...别让我失望。','数字不会说谎，但运气会。'
-      ]); bankerMood.value='neutral'; bankerEmoji.value='🧐'
+        '这是我的报价，你自己决定。', '机会不等人哦...想好了再做决定。',
+        '命运掌握在你手中...别让我失望。', '数字不会说谎，但运气会。'
+      ]); bankerMood.value = 'neutral'; bankerEmoji.value = '🧐'
   }
 
   bankerBubbleText.value = line
@@ -2156,9 +2334,9 @@ function generateBankerDialogue() {
   } else {
     startTypewriter(line, 45)
   }
-  if (bankerMood.value==='angry') bankerMessage.value='银行家发出挑战！'
-  else if (bankerMood.value==='panic') bankerMessage.value='银行家开始慌了...'
-  else bankerMessage.value='银行家来电...'
+  if (bankerMood.value === 'angry') bankerMessage.value = '银行家发出挑战！'
+  else if (bankerMood.value === 'panic') bankerMessage.value = '银行家开始慌了...'
+  else bankerMessage.value = '银行家来电...'
 }
 
 // 终极抉择台词
@@ -2217,7 +2395,7 @@ const gridCols = computed(() => {
 
 const vaultLevel = computed(() => stats.value.vaultLevel || 0)
 const vaultPoints = computed(() => stats.value.vaultPoints || 0)
-const vaultName = computed(() => VAULT_LEVELS[Math.min(vaultLevel.value, VAULT_LEVELS.length-1)].icon + ' ' + VAULT_LEVELS[Math.min(vaultLevel.value, VAULT_LEVELS.length-1)].name)
+const vaultName = computed(() => VAULT_LEVELS[Math.min(vaultLevel.value, VAULT_LEVELS.length - 1)].icon + ' ' + VAULT_LEVELS[Math.min(vaultLevel.value, VAULT_LEVELS.length - 1)].name)
 const nextVaultCost = computed(() => {
   const next = vaultLevel.value + 1
   return next < VAULT_LEVELS.length ? VAULT_LEVELS[next].cost : 999999
@@ -2315,7 +2493,7 @@ function initGame() {
     tutorialPhase.value = scriptedGame.value
     if (scriptedGame.value === 1) noviceProtectionActive.value = true
   }
-  
+
   if (scriptedGame.value === 1) {
     // Act1 造神局：玩家盒子=70%分位，小奖排在前面被开掉，营造“运气爆棚”的假象
     const median = currentAmounts[Math.floor(currentAmounts.length * 0.7)]
@@ -2444,8 +2622,11 @@ function initGame() {
   nearMissRevealText.value = ''
   fragmentsEarnedThisGame.value = 0
   provocationBadge.value = null
-  boxLongPressHint.value = ''
   bankerWasAngryThisGame.value = false
+  if (boxOpenTimer) {
+    clearInterval(boxOpenTimer)
+    boxOpenTimer = null
+  }
   clearDanmaku(); clearTypewriter()
   screenShake.value = false; spotlightOn.value = false
   bankerStampTarget.value = -1; shatterEffect.value = false
@@ -2460,17 +2641,14 @@ function startNewGame() {
     selectedTier.value = 0
   }
 
-  // 检查资金是否足够
   const tier = TICKET_TIERS[selectedTier.value]
   const cost = tier.cost
   if (wallet.value < cost) {
-    // 资金不足
     isBankrupt.value = true
     showStartScreen.value = false
     return
   }
 
-  // 扣除门票
   wallet.value -= cost
   currentTicketCost.value = cost
 
@@ -2482,14 +2660,6 @@ function startNewGame() {
 }
 
 // === 盒子点击 ===
-function showBoxLongPressHint() {
-  boxLongPressHint.value = `👆 请长按箱子 ${BOX_OPEN_LONG_PRESS_MS / 1000} 秒开启`
-  bankerMessage.value = `长按 ${BOX_OPEN_LONG_PRESS_MS / 1000} 秒确认开箱，松手无效`
-  bankerEmoji.value = '👆'
-  clearTimeout(boxHintTimer)
-  boxHintTimer = setTimeout(() => { boxLongPressHint.value = '' }, 2500)
-}
-
 function onBoxClick(box) {
   if (animating.value) return
   if (box.opened || box.animating) return
@@ -2498,13 +2668,12 @@ function onBoxClick(box) {
     selectMyBox(box)
   } else if (gameState.value === 'OPEN_BOXES') {
     if (box.isMyBox) return
-    showBoxLongPressHint()
+    openBox(box)
   }
 }
 
 function onBoxMouseLeave() {
   luckyBoxHint.value = -1
-  cancelLongPressOpenBox()
 }
 
 function selectMyBox(box) {
@@ -2556,6 +2725,13 @@ function onBoxHover(box) {
 
 // === 开箱（多阶段动画） ===
 function finishBoxReveal(box) {
+  if (boxOpenTimer) {
+    clearInterval(boxOpenTimer)
+    boxOpenTimer = null
+  }
+  longPressProgress.value = 0
+  longPressBoxId.value = -1
+
   box.animStage = 'reveal'
   box.opened = true
   box.eliminated = true
@@ -2640,32 +2816,48 @@ function finishBoxReveal(box) {
 
 function openBox(box) {
   if (animating.value || box.opened || box.animating) return
+  if (gameState.value !== 'OPEN_BOXES') return
+  if (box.isMyBox) return
+
   animating.value = true
   box.animating = true
   playSound('select')
   bankerMessage.value = ''
   bankerEmoji.value = ''
 
-  if (skipAnimation.value) {
-    finishBoxReveal(box)
-    return
-  }
-
   box.animStage = 'shake'
   playSound('rumble')
-  setTimeout(() => {
-    box.animStage = 'glow'
-    playSound('creak')
-    setTimeout(() => finishBoxReveal(box), 1000)
-  }, 800)
-}
 
+  let elapsed = 0
+  longPressProgress.value = 0
+  longPressBoxId.value = box.id
+
+  if (boxOpenTimer) clearInterval(boxOpenTimer)
+
+  boxOpenTimer = setInterval(() => {
+    elapsed += BOX_OPEN_TICK_MS
+    longPressProgress.value = Math.min(100, (elapsed / BOX_OPEN_DURATION_MS) * 100)
+
+    if (elapsed >= BOX_OPEN_DURATION_MS) {
+      clearInterval(boxOpenTimer)
+      boxOpenTimer = null
+      longPressProgress.value = 100
+
+      box.animStage = 'glow'
+      playSound('creak')
+
+      setTimeout(() => {
+        finishBoxReveal(box)
+      }, 300)
+    }
+  }, BOX_OPEN_TICK_MS)
+}
 // === 情绪温度计系统 ===
 function updateEmotion(delta, reason) {
   const prevValue = emotionValue.value
   emotionValue.value = Math.max(0, Math.min(100, emotionValue.value + delta))
   emotionTrend.value = emotionValue.value - prevValue
-  
+
   // 根据情绪等级调整弹幕效果
   if (anxietyLevel.value === 'extreme') {
     // 极度焦虑：弹幕加速、字体变大、颜色变红
@@ -2681,7 +2873,7 @@ function updateEmotion(delta, reason) {
     danmakuFontSize.value = 14
     danmakuColorIntensity.value = 0.6
   }
-  
+
   if (reason) {
     console.log(`情绪变化: ${delta > 0 ? '↑' : '↓'}${Math.abs(delta)} - ${reason}`)
   }
@@ -3204,7 +3396,7 @@ function endGame() {
   stats.value.wallet = wallet.value
 
   // === 金融衍生品道具结算效果 ===
-  
+
   // 高杠杆期权：赢了抹平债务，输了强制平仓
   if (bmHighLeverage.value) {
     if (winAmount.value > 0 && debt.value > 0) {
@@ -3224,7 +3416,7 @@ function endGame() {
       }
     }
   }
-  
+
   // 内幕交易：系统审查风险50%，失败则奖金减半
   if (bmInsiderTrading.value && Math.random() < 0.5) {
     const halved = Math.floor(winAmount.value / 2)
@@ -3240,7 +3432,7 @@ function endGame() {
       debt.value += Math.round(interest)
       debt.value = Math.max(debt.value, 0)
     }
-    
+
     // 用奖金偿还债务
     if (winAmount.value > 0 && debt.value > 0) {
       const paid = Math.min(winAmount.value, debt.value)
@@ -3252,7 +3444,7 @@ function endGame() {
         spawnDanmaku('big', 5) // 庆祝弹幕
       }
     }
-    
+
     // 更新生存点数
     if (debt.value > 0) {
       const debtPressure = Math.min(debt.value / 100000, 1)
@@ -3261,7 +3453,7 @@ function endGame() {
       // 无债务时恢复生存点数
       survivalPoints.value = Math.min(100, survivalPoints.value + 5)
     }
-    
+
     // 更新红色警戒等级
     if (survivalPoints.value <= 20) {
       redAlertLevel.value = 3
@@ -3272,7 +3464,7 @@ function endGame() {
     } else {
       redAlertLevel.value = 0
     }
-    
+
     // 检查强制回收
     if (survivalPoints.value <= 0) {
       triggerForcedCollection()
@@ -3567,7 +3759,7 @@ function playSound(type) {
       g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3)
       o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.3)
     }
-  } catch (e) {}
+  } catch (e) { }
 }
 
 function toggleSound() {
@@ -3602,17 +3794,6 @@ function startLongPressReject() {
 }
 
 function cancelLongPressReject() {
-  cancelLongPress()
-}
-
-function startLongPressOpenBox(box) {
-  if (animating.value || box.opened || box.animating) return
-  if (gameState.value !== 'OPEN_BOXES' || box.isMyBox) return
-  boxLongPressHint.value = ''
-  startLongPress(() => openBox(box), BOX_OPEN_LONG_PRESS_MS, box.id)
-}
-
-function cancelLongPressOpenBox() {
   cancelLongPress()
 }
 
@@ -3906,11 +4087,11 @@ function generateFinalDanmaku() {
   } else if (scriptedGame.value === 3) {
     pool = ['复仇成功！', 'No Deal yyds！', '银行家被打脸了', '这才是深渊玩家', '继续保持！']
   } else if (winAmount.value >= maxAmt * 0.3) {
-    pool = ['卧槽！！！封神！','天选之子！','大佬带带我！','这也太猛了！','银行家被打脸了！']
+    pool = ['卧槽！！！封神！', '天选之子！', '大佬带带我！', '这也太猛了！', '银行家被打脸了！']
   } else if (winAmount.value >= maxAmt * 0.05) {
-    pool = ['还行还行','稳扎稳打','下把冲！','见好就收也不错','银行家松了口气']
+    pool = ['还行还行', '稳扎稳打', '下把冲！', '见好就收也不错', '银行家松了口气']
   } else {
-    pool = ['哈哈哈 小丑竟是我自己','非酋落泪','银行家笑疯了','下一局一定能翻盘！','就这？']
+    pool = ['哈哈哈 小丑竟是我自己', '非酋落泪', '银行家笑疯了', '下一局一定能翻盘！', '就这？']
   }
   frozenDanmaku.value = pool.slice(0, 5).map(t => ({
     text: t, color: winAmount.value >= maxAmt * 0.3 ? '#ffd700' : winAmount.value >= maxAmt * 0.05 ? '#94a3b8' : '#ff6b6b'
@@ -3959,7 +4140,7 @@ async function copyBattleReport() {
   try {
     await navigator.clipboard.writeText(text)
     playSound('coin')
-  } catch (e) {}
+  } catch (e) { }
 }
 
 // ===== 解锁提示 =====
@@ -4002,10 +4183,16 @@ function amountRowStyle(amt) {
   return { background: 'transparent' }
 }
 
+function isBoxOpening(box) {
+  return longPressBoxId.value === box.id && longPressProgress.value > 0 && longPressProgress.value < 100
+}
+
 function chestClasses(box) {
   const finalPhase = remainingCount.value <= 3 && gameState.value !== 'IDLE' && gameState.value !== 'SELECT_MY_BOX'
+  const opening = isBoxOpening(box)
   return [
-    'relative w-full aspect-square rounded-xl cursor-pointer transition-all duration-200 overflow-hidden',
+    'relative w-full aspect-square rounded-xl cursor-pointer transition-all duration-200',
+    opening ? 'chest-opening overflow-visible z-20' : 'overflow-hidden',
     box.isMyBox && !box.opened && !box.animStage ? (finalPhase ? 'chest-heartbeat' : 'chest-breathe') : '',
     box.opened && !box.animStage ? 'opacity-50' : '',
     !box.opened && !box.animStage ? 'hover:scale-105 hover:brightness-110' : '',
@@ -4020,7 +4207,7 @@ function formatNum(n) {
 
 // === LocalStorage ===
 function saveAll() {
-  try { localStorage.setItem('dond_all', JSON.stringify(stats.value)) } catch (e) {}
+  try { localStorage.setItem('dond_all', JSON.stringify(stats.value)) } catch (e) { }
 }
 function loadAll() {
   try {
@@ -4041,7 +4228,7 @@ function loadAll() {
       // 检查破产
       if (wallet.value < TICKET_TIERS[0].cost) isBankrupt.value = true
     }
-  } catch (e) {}
+  } catch (e) { }
 }
 
 function resetWallet() {
@@ -4058,7 +4245,7 @@ function saveSettings() {
       skipAnimation: skipAnimation.value,
       skipBankerDialog: skipBankerDialog.value
     }))
-  } catch (e) {}
+  } catch (e) { }
 }
 function loadSettings() {
   try {
@@ -4072,7 +4259,7 @@ function loadSettings() {
         else if (k === 'skipBankerDialog') skipBankerDialog.value = d[k]
       })
     }
-  } catch (e) {}
+  } catch (e) { }
 }
 
 // 监听金库弹窗打开时绘制雷达图
@@ -4099,10 +4286,10 @@ onUnmounted(() => {
   clearInterval(offerTimerInterval)
   clearInterval(finalTimerInterval)
   clearInterval(longPressTimer)
+  clearInterval(boxOpenTimer)
   clearInterval(typewriterInterval)
   clearInterval(danmakuSpawnInterval)
   clearInterval(slotInterval)
-  clearTimeout(boxHintTimer)
   window.removeEventListener('keydown', handleKeydown)
 })
 </script>
@@ -4125,12 +4312,13 @@ onUnmounted(() => {
   z-index: 0;
   pointer-events: none;
 }
+
 /* 轻微暗角，避免完全盖住背景图 */
 .cyber-background::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(10,10,15,0.35) 0%, rgba(26,26,46,0.25) 50%, rgba(15,15,26,0.4) 100%);
+  background: linear-gradient(135deg, rgba(10, 10, 15, 0.35) 0%, rgba(26, 26, 46, 0.25) 50%, rgba(15, 15, 26, 0.4) 100%);
   pointer-events: none;
 }
 
@@ -4138,31 +4326,32 @@ onUnmounted(() => {
 :deep(.dond-main-panel) {
   position: relative;
   z-index: 1;
-  background: linear-gradient(145deg, rgba(13,17,23,0.72) 0%, rgba(22,27,34,0.78) 50%, rgba(13,17,23,0.72) 100%) !important;
+  background: linear-gradient(145deg, rgba(13, 17, 23, 0.72) 0%, rgba(22, 27, 34, 0.78) 50%, rgba(13, 17, 23, 0.72) 100%) !important;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
+
 .cyber-grid {
   position: absolute;
   inset: 0;
-  background-image: 
+  background-image:
     linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
   background-size: 50px 50px;
   pointer-events: none;
 }
+
 .cyber-scanlines {
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.1) 2px,
-    rgba(0, 0, 0, 0.1) 4px
-  );
+  background: repeating-linear-gradient(0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.1) 2px,
+      rgba(0, 0, 0, 0.1) 4px);
   pointer-events: none;
 }
+
 .cyber-glow {
   position: absolute;
   top: 0;
@@ -4200,6 +4389,7 @@ onUnmounted(() => {
   overflow: hidden;
   box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
 }
+
 .terminal-header {
   display: flex;
   justify-content: space-between;
@@ -4207,20 +4397,24 @@ onUnmounted(() => {
   background: rgba(0, 240, 255, 0.1);
   border-bottom: 1px solid #00f0ff;
 }
+
 .terminal-title {
   color: #00f0ff;
   font-family: 'Courier New', monospace;
   font-size: 0.85rem;
 }
+
 .terminal-status {
   color: #4ade80;
   font-family: 'Courier New', monospace;
   font-size: 0.8rem;
 }
+
 .terminal-content {
   padding: 16px;
   min-height: 200px;
 }
+
 .terminal-line {
   color: #00f0ff;
   font-family: 'Courier New', monospace;
@@ -4228,28 +4422,48 @@ onUnmounted(() => {
   line-height: 1.6;
   margin-bottom: 4px;
 }
+
 .terminal-line.system-line {
   color: #f59e0b;
 }
+
 .cursor {
   animation: blink 1s step-end infinite;
 }
+
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
+
 .terminal-loading {
   padding: 8px 16px;
   border-top: 1px solid rgba(0, 240, 255, 0.2);
 }
+
 .loading-bar {
   height: 4px;
   background: linear-gradient(90deg, #00f0ff, #0066ff);
   animation: loading 2s ease-in-out infinite;
 }
+
 @keyframes loading {
-  0%, 100% { width: 0%; }
-  50% { width: 100%; }
+
+  0%,
+  100% {
+    width: 0%;
+  }
+
+  50% {
+    width: 100%;
+  }
 }
 
 /* === AI阿特拉斯视觉 === */
@@ -4260,6 +4474,7 @@ onUnmounted(() => {
   justify-content: center;
   padding: 0 16px;
 }
+
 .atlas-image-wrapper {
   position: relative;
   width: min(300px, 70vw);
@@ -4270,6 +4485,7 @@ onUnmounted(() => {
   border: 2px solid rgba(0, 240, 255, 0.45);
   box-shadow: 0 0 40px rgba(0, 240, 255, 0.25), inset 0 0 30px rgba(0, 240, 255, 0.08);
 }
+
 .atlas-image {
   width: 100%;
   height: 100%;
@@ -4277,12 +4493,14 @@ onUnmounted(() => {
   object-position: center top;
   display: block;
 }
+
 .atlas-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 45%, transparent 70%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.1) 45%, transparent 70%);
   pointer-events: none;
 }
+
 .atlas-eyes-glow {
   position: absolute;
   top: 22%;
@@ -4291,13 +4509,15 @@ onUnmounted(() => {
   width: 55%;
   height: 10%;
   border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(0,240,255,0.55) 0%, transparent 72%);
+  background: radial-gradient(ellipse, rgba(0, 240, 255, 0.55) 0%, transparent 72%);
   pointer-events: none;
   animation: glowPulse 2.5s ease-in-out infinite;
 }
+
 .atlas-portrait-side {
   text-align: center;
 }
+
 .atlas-portrait-img {
   width: 100%;
   max-width: 120px;
@@ -4310,6 +4530,7 @@ onUnmounted(() => {
   display: block;
   margin: 0 auto;
 }
+
 .atlas-start-preview {
   width: 88px;
   height: 110px;
@@ -4319,6 +4540,7 @@ onUnmounted(() => {
   border: 1px solid rgba(0, 240, 255, 0.4);
   box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
 }
+
 .atlas-modal-preview {
   width: 72px;
   height: 90px;
@@ -4336,6 +4558,7 @@ onUnmounted(() => {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 .eye-outer {
   width: 200px;
   height: 200px;
@@ -4348,10 +4571,21 @@ onUnmounted(() => {
   box-shadow: 0 0 40px rgba(0, 240, 255, 0.4), inset 0 0 30px rgba(0, 240, 255, 0.1);
   animation: eyePulse 3s ease-in-out infinite;
 }
+
 @keyframes eyePulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(0, 240, 255, 0.4); }
-  50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(0, 240, 255, 0.6); }
+
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.4);
+  }
+
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 60px rgba(0, 240, 255, 0.6);
+  }
 }
+
 .eye-inner {
   width: 120px;
   height: 120px;
@@ -4362,6 +4596,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
 }
+
 .eye-pupil {
   width: 60px;
   height: 60px;
@@ -4372,22 +4607,28 @@ onUnmounted(() => {
   justify-content: center;
   box-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
 }
+
 .kline-animation {
   width: 40px;
   height: 40px;
-  background: repeating-linear-gradient(
-    45deg,
-    #000 2px,
-    #4ade80 2px,
-    #4ade80 4px,
-    #000 4px
-  );
+  background: repeating-linear-gradient(45deg,
+      #000 2px,
+      #4ade80 2px,
+      #4ade80 4px,
+      #000 4px);
   animation: klineShift 1s linear infinite;
 }
+
 @keyframes klineShift {
-  0% { background-position: 0 0; }
-  100% { background-position: 4px 4px; }
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 4px 4px;
+  }
 }
+
 .eye-glow {
   position: absolute;
   width: 300px;
@@ -4396,9 +4637,19 @@ onUnmounted(() => {
   background: radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 70%);
   animation: glowPulse 3s ease-in-out infinite;
 }
+
 @keyframes glowPulse {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.2); }
+
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
 }
 
 /* === 新手引导提示 === */
@@ -4409,6 +4660,7 @@ onUnmounted(() => {
   transform: translateX(-50%);
   z-index: 150;
 }
+
 .hint-text {
   display: flex;
   align-items: center;
@@ -4422,14 +4674,24 @@ onUnmounted(() => {
   font-size: 0.85rem;
   animation: hintPulse 2s ease-in-out infinite;
 }
+
 @keyframes hintPulse {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
+
 .hint-text.ignore-task {
   border-color: #f59e0b;
   color: #f59e0b;
 }
+
 .hint-icon {
   font-size: 1rem;
 }
@@ -4456,193 +4718,536 @@ onUnmounted(() => {
 
 /* === 宝箱基础样式 === */
 .chest-img {
-  width: 100%; height: 100%; object-fit: contain;
-  position: absolute; inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  position: absolute;
+  inset: 0;
   transition: all 0.4s ease;
-  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
 }
+
 .chest-img-opened {
-  opacity: 0.3; transform: scale(0.85);
-  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.3)) grayscale(0.5);
+  opacity: 0.3;
+  transform: scale(0.85);
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.3)) grayscale(0.5);
 }
+
 .chest-img-shake {
-  animation: chestShake 0.8s ease-in-out;
-  filter: drop-shadow(0 0 12px rgba(255,165,0,0.4));
+  filter: drop-shadow(0 0 12px rgba(255, 165, 0, 0.4));
 }
+
+.chest-img-unlocking {
+  animation: chestUnlockShake 0.32s ease-in-out infinite;
+  filter: drop-shadow(0 0 18px rgba(255, 165, 0, 0.55)) brightness(1.06);
+}
+
+@keyframes chestUnlockShake {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  25% { transform: translateX(-3px) rotate(-1.5deg); }
+  75% { transform: translateX(3px) rotate(1.5deg); }
+}
+
+.chest-opening {
+  transform: scale(1.05);
+  box-shadow:
+    0 0 0 2px rgba(0, 240, 255, 0.35),
+    0 0 28px rgba(0, 240, 255, 0.22),
+    0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.chest-open-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 55%, rgba(0, 30, 60, 0.1) 0%, rgba(0, 0, 0, 0.72) 100%);
+  z-index: 6;
+  pointer-events: none;
+  animation: openOverlayPulse 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes openOverlayPulse {
+  from { opacity: 0.82; }
+  to { opacity: 1; }
+}
+
+.chest-progress-ring {
+  position: absolute;
+  inset: -14px;
+  z-index: 12;
+  pointer-events: none;
+}
+
+.chest-progress-ring__track {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 14px rgba(0, 240, 255, 0.12);
+}
+
+.chest-progress-ring__arc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from -90deg,
+    var(--ring-color) calc(var(--progress) * 3.6deg),
+    transparent calc(var(--progress) * 3.6deg)
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 7px), #000 calc(100% - 6px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 7px), #000 calc(100% - 6px));
+  filter: drop-shadow(0 0 8px var(--ring-color));
+}
+
+.chest-progress-core {
+  position: absolute;
+  inset: 24%;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  background: rgba(0, 8, 16, 0.72);
+  border: 1px solid rgba(0, 240, 255, 0.28);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.15);
+}
+
+.chest-progress-icon {
+  font-size: 0.8rem;
+  line-height: 1;
+  animation: lockWiggle 0.45s ease-in-out infinite alternate;
+}
+
+@keyframes lockWiggle {
+  from { transform: rotate(-8deg) scale(0.95); }
+  to { transform: rotate(8deg) scale(1.05); }
+}
+
+.chest-progress-label {
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  color: rgba(148, 163, 184, 0.95);
+  text-transform: uppercase;
+}
+
+.chest-progress-pct {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #00f0ff;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.75);
+}
+
+.chest-burst-ring {
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 215, 0, 0.85);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.45);
+  animation: burstRing 0.35s ease-out forwards;
+  z-index: 11;
+  pointer-events: none;
+}
+
+@keyframes burstRing {
+  0% { transform: scale(0.88); opacity: 1; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+
 @keyframes chestShake {
-  0%,100% { transform: translateX(0) rotate(0); }
-  10% { transform: translateX(-4px) rotate(-2deg); }
-  20% { transform: translateX(4px) rotate(2deg); }
-  30% { transform: translateX(-5px) rotate(-3deg); }
-  40% { transform: translateX(5px) rotate(3deg); }
-  50% { transform: translateX(-3px) rotate(-2deg); }
-  60% { transform: translateX(3px) rotate(2deg); }
-  70% { transform: translateX(-4px) rotate(-1deg); }
-  80% { transform: translateX(4px) rotate(1deg); }
-  90% { transform: translateX(-2px) rotate(0); }
+
+  0%,
+  100% {
+    transform: translateX(0) rotate(0);
+  }
+
+  10% {
+    transform: translateX(-4px) rotate(-2deg);
+  }
+
+  20% {
+    transform: translateX(4px) rotate(2deg);
+  }
+
+  30% {
+    transform: translateX(-5px) rotate(-3deg);
+  }
+
+  40% {
+    transform: translateX(5px) rotate(3deg);
+  }
+
+  50% {
+    transform: translateX(-3px) rotate(-2deg);
+  }
+
+  60% {
+    transform: translateX(3px) rotate(2deg);
+  }
+
+  70% {
+    transform: translateX(-4px) rotate(-1deg);
+  }
+
+  80% {
+    transform: translateX(4px) rotate(1deg);
+  }
+
+  90% {
+    transform: translateX(-2px) rotate(0);
+  }
 }
+
 .chest-img-glow {
   transform: scale(1.08);
-  filter: drop-shadow(0 0 20px rgba(255,215,0,0.6)) drop-shadow(0 0 40px rgba(255,215,0,0.3));
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6)) drop-shadow(0 0 40px rgba(255, 215, 0, 0.3));
   animation: chestGlow 1s ease-in-out;
 }
+
 @keyframes chestGlow {
-  0% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(255,165,0,0.3)); }
-  50% { transform: scale(1.1); filter: drop-shadow(0 0 25px rgba(255,215,0,0.7)) drop-shadow(0 0 50px rgba(255,215,0,0.3)); }
-  100% { transform: scale(1.08); filter: drop-shadow(0 0 20px rgba(255,215,0,0.6)); }
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 8px rgba(255, 165, 0, 0.3));
+  }
+
+  50% {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.7)) drop-shadow(0 0 50px rgba(255, 215, 0, 0.3));
+  }
+
+  100% {
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+  }
 }
 
 /* 箱子编号 */
 .chest-number {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.4rem; font-weight: 900;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 900;
   color: #00f0ff;
-  text-shadow: 0 0 10px rgba(0,240,255,0.5), 0 2px 4px rgba(0,0,0,0.8);
-  z-index: 2; pointer-events: none;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5), 0 2px 4px rgba(0, 0, 0, 0.8);
+  z-index: 2;
+  pointer-events: none;
 }
 
 /* 开盖光效 */
 .chest-lid-glow {
-  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 60%; height: 40%;
-  background: radial-gradient(ellipse, rgba(255,215,0,0.6) 0%, rgba(255,215,0,0) 70%);
-  animation: lidGlow 1s ease-out;
-  z-index: 3; pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 45%;
+  background: radial-gradient(ellipse, rgba(255, 215, 0, 0.75) 0%, rgba(255, 140, 0, 0.25) 45%, rgba(255, 215, 0, 0) 72%);
+  animation: lidGlow 0.35s ease-out;
+  z-index: 8;
+  pointer-events: none;
 }
+
 @keyframes lidGlow {
-  0% { opacity: 0; transform: translateX(-50%) scale(0.5); }
-  50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
-  100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.5);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.2);
+  }
+
+  100% {
+    opacity: 0.6;
+    transform: translateX(-50%) scale(1);
+  }
 }
 
 /* 揭晓金额 */
 .chest-reveal {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  z-index: 5; pointer-events: none;
-  background: rgba(0,0,0,0.4);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 15;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.65) 100%);
   border-radius: 0.75rem;
+  backdrop-filter: blur(2px);
 }
+
 .chest-reveal-enter {
   animation: revealPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
 @keyframes revealPop {
-  0% { opacity: 0; transform: scale(0.3); }
-  60% { opacity: 1; transform: scale(1.15); }
-  100% { opacity: 1; transform: scale(1); }
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
+
 .chest-amount {
-  font-size: 1rem; font-weight: 900;
-  text-align: center; line-height: 1.2;
+  font-size: 1rem;
+  font-weight: 900;
+  text-align: center;
+  line-height: 1.2;
 }
+
 .amount-gold {
   color: #ffd700;
-  text-shadow: 0 0 12px rgba(255,215,0,0.6), 0 0 24px rgba(255,215,0,0.3);
+  text-shadow: 0 0 12px rgba(255, 215, 0, 0.6), 0 0 24px rgba(255, 215, 0, 0.3);
   animation: amountPulse 1s ease-in-out infinite;
 }
+
 @keyframes amountPulse {
-  0%,100% { text-shadow: 0 0 12px rgba(255,215,0,0.6); }
-  50% { text-shadow: 0 0 20px rgba(255,215,0,0.8), 0 0 40px rgba(255,215,0,0.4); }
+
+  0%,
+  100% {
+    text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+  }
+
+  50% {
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.4);
+  }
 }
-.amount-cyan { color: #00f0ff; text-shadow: 0 0 8px rgba(0,240,255,0.4); }
-.amount-gray { color: #94a3b8; }
+
+.amount-cyan {
+  color: #00f0ff;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+}
+
+.amount-gray {
+  color: #94a3b8;
+}
 
 /* 呼吸动画 */
 .chest-breathe {
   animation: chestBreathe 2s ease-in-out infinite;
 }
+
 @keyframes chestBreathe {
-  0%,100% { filter: drop-shadow(0 0 6px rgba(255,215,0,0.15)); }
-  50% { filter: drop-shadow(0 0 16px rgba(255,215,0,0.4)) drop-shadow(0 0 24px rgba(255,215,0,0.15)); }
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.15));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.4)) drop-shadow(0 0 24px rgba(255, 215, 0, 0.15));
+  }
 }
+
 .chest-heartbeat {
   animation: chestHeartbeat 0.8s ease-in-out infinite;
 }
+
 @keyframes chestHeartbeat {
-  0%,100% { filter: drop-shadow(0 0 6px rgba(255,50,50,0.3)); transform: scale(1); }
-  25% { filter: drop-shadow(0 0 20px rgba(255,50,50,0.6)); transform: scale(1.04); }
-  50% { filter: drop-shadow(0 0 6px rgba(255,50,50,0.3)); transform: scale(1); }
-  75% { filter: drop-shadow(0 0 16px rgba(255,50,50,0.5)); transform: scale(1.02); }
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 6px rgba(255, 50, 50, 0.3));
+    transform: scale(1);
+  }
+
+  25% {
+    filter: drop-shadow(0 0 20px rgba(255, 50, 50, 0.6));
+    transform: scale(1.04);
+  }
+
+  50% {
+    filter: drop-shadow(0 0 6px rgba(255, 50, 50, 0.3));
+    transform: scale(1);
+  }
+
+  75% {
+    filter: drop-shadow(0 0 16px rgba(255, 50, 50, 0.5));
+    transform: scale(1.02);
+  }
 }
+
 .chest-mybox {
-  outline: 2px solid rgba(255,215,0,0.4);
+  outline: 2px solid rgba(255, 215, 0, 0.4);
   outline-offset: 2px;
   border-radius: 0.75rem;
 }
 
 /* === 银行家气泡 === */
 .banker-bubble {
-  display: flex; align-items: center;
-  padding: 10px 14px; border-radius: 12px;
-  background: rgba(255,215,0,0.08);
-  border: 1px solid rgba(255,215,0,0.25);
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 215, 0, 0.08);
+  border: 1px solid rgba(255, 215, 0, 0.25);
   animation: bubbleIn 0.3s ease-out;
 }
+
 @keyframes bubbleIn {
-  from { opacity:0; transform:translateY(-8px); }
-  to { opacity:1; transform:translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* === 弹窗/特效 === */
 .banker-modal {
-  border: 1px solid rgba(0,240,255,0.2);
-  box-shadow: 0 0 40px rgba(0,240,255,0.1);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 40px rgba(0, 240, 255, 0.1);
 }
-.shake-anim { animation: shake 0.4s ease-in-out infinite; }
+
+.shake-anim {
+  animation: shake 0.4s ease-in-out infinite;
+}
+
 @keyframes shake {
-  0%,100% { transform: translateX(0); }
-  25% { transform: translateX(-3px); }
-  75% { transform: translateX(3px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-3px);
+  }
+
+  75% {
+    transform: translateX(3px);
+  }
 }
+
 .gold-glow-overlay {
-  position: fixed; inset: 0; pointer-events: none; z-index: 100;
-  box-shadow: inset 0 0 80px rgba(255,215,0,0.4), inset 0 0 160px rgba(255,215,0,0.2);
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: inset 0 0 80px rgba(255, 215, 0, 0.4), inset 0 0 160px rgba(255, 215, 0, 0.2);
   animation: goldFade 1.5s ease-out forwards;
 }
-@keyframes goldFade { from { opacity:1 } to { opacity:0 } }
+
+@keyframes goldFade {
+  from {
+    opacity: 1
+  }
+
+  to {
+    opacity: 0
+  }
+}
+
 .vignette-overlay {
-  position: fixed; inset: 0; pointer-events: none; z-index: 100;
-  box-shadow: inset 0 0 100px rgba(0,0,0,0.6);
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.6);
   animation: vignetteFade 0.8s ease-out forwards;
 }
-@keyframes vignetteFade { from { opacity:1 } to { opacity:0 } }
+
+@keyframes vignetteFade {
+  from {
+    opacity: 1
+  }
+
+  to {
+    opacity: 0
+  }
+}
 
 /* === 弹幕系统 === */
 .danmaku-container {
-  position: fixed; top: 0; left: 0; right: 0; height: 220px;
-  pointer-events: none; z-index: 90; overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 220px;
+  pointer-events: none;
+  z-index: 90;
+  overflow: hidden;
   transition: filter 0.5s;
 }
-.danmaku-dimmed { filter: brightness(0.3) blur(1px); }
-.danmaku-item {
-  position: absolute; right: -400px;
-  font-size: 0.85rem; font-weight: 700; white-space: nowrap;
-  text-shadow: 0 0 6px rgba(0,0,0,0.8), 0 1px 3px rgba(0,0,0,0.6);
-  animation: danmakuScroll var(--travel, 800px) linear forwards;
-  padding: 2px 8px; border-radius: 4px;
-  background: rgba(0,0,0,0.25);
+
+.danmaku-dimmed {
+  filter: brightness(0.3) blur(1px);
 }
+
+.danmaku-item {
+  position: absolute;
+  right: -400px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.6);
+  animation: danmakuScroll var(--travel, 800px) linear forwards;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
 .danmaku-item.left {
-  right: auto; left: -400px;
+  right: auto;
+  left: -400px;
   animation: danmakuScrollLeft var(--travel, 800px) linear forwards;
 }
+
 .danmaku-stamped {
-  text-decoration: line-through; opacity: 0.4;
+  text-decoration: line-through;
+  opacity: 0.4;
   position: relative;
 }
+
 .banker-x {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-  color: #ff0000; font-size: 1.5rem; font-weight: 900;
-  text-shadow: 0 0 10px rgba(255,0,0,0.8);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ff0000;
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
 }
+
 @keyframes danmakuScroll {
-  from { right: -400px; }
-  to { right: 110%; }
+  from {
+    right: -400px;
+  }
+
+  to {
+    right: 110%;
+  }
 }
+
 @keyframes danmakuScrollLeft {
-  from { left: -400px; }
-  to { left: 110%; }
+  from {
+    left: -400px;
+  }
+
+  to {
+    left: 110%;
+  }
 }
 
 /* === 处刑弹幕样式 === */
@@ -4654,224 +5259,413 @@ onUnmounted(() => {
   right: auto !important;
   transform: translateX(-50%);
   color: #ff0000 !important;
-  text-shadow: 0 0 20px rgba(255,0,0,0.8), 0 0 40px rgba(255,0,0,0.4), 0 4px 8px rgba(0,0,0,0.8);
+  text-shadow: 0 0 20px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 0, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.8);
   animation: executionPulse 0.5s ease-in-out infinite;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0, 0, 0, 0.8);
   padding: 12px 24px;
   border: 2px solid #ff0000;
   border-radius: 8px;
   z-index: 100;
 }
+
 @keyframes executionPulse {
-  0%, 100% { transform: translateX(-50%) scale(1); }
-  50% { transform: translateX(-50%) scale(1.1); }
+
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+
+  50% {
+    transform: translateX(-50%) scale(1.1);
+  }
 }
+
 .danmaku-item.shatter {
   animation: shatter 0.5s ease-out forwards;
 }
+
 @keyframes shatter {
-  0% { 
-    opacity: 1; 
-    transform: translateX(-50%) scale(1); 
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
     filter: blur(0);
   }
-  50% { 
-    opacity: 0.8; 
-    transform: translateX(-50%) scale(1.2); 
+
+  50% {
+    opacity: 0.8;
+    transform: translateX(-50%) scale(1.2);
     filter: blur(2px);
   }
-  100% { 
-    opacity: 0; 
-    transform: translateX(-50%) scale(1.5); 
+
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scale(1.5);
     filter: blur(8px);
   }
 }
 
 /* === 银行家印章 === */
 .banker-stamp-overlay {
-  position: fixed; inset: 0; pointer-events: none; z-index: 95;
-  display: flex; align-items: center; justify-content: center;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 95;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .banker-stamp {
-  font-size: 3rem; font-weight: 900; color: #ff0000;
-  text-shadow: 0 0 20px rgba(255,0,0,0.6), 0 4px 8px rgba(0,0,0,0.5);
+  font-size: 3rem;
+  font-weight: 900;
+  color: #ff0000;
+  text-shadow: 0 0 20px rgba(255, 0, 0, 0.6), 0 4px 8px rgba(0, 0, 0, 0.5);
   transform: rotate(-15deg);
   animation: stampSlam 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: 4px solid #ff0000; padding: 8px 24px; border-radius: 8px;
-  background: rgba(0,0,0,0.6);
+  border: 4px solid #ff0000;
+  padding: 8px 24px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.6);
 }
+
 @keyframes stampSlam {
-  0% { transform: rotate(-15deg) scale(3); opacity: 0; }
-  70% { transform: rotate(-15deg) scale(0.9); opacity: 1; }
-  100% { transform: rotate(-15deg) scale(1); opacity: 1; }
+  0% {
+    transform: rotate(-15deg) scale(3);
+    opacity: 0;
+  }
+
+  70% {
+    transform: rotate(-15deg) scale(0.9);
+    opacity: 1;
+  }
+
+  100% {
+    transform: rotate(-15deg) scale(1);
+    opacity: 1;
+  }
 }
 
 /* === 屏幕震动 === */
 .screen-shake-layer {
-  position: fixed; inset: 0; pointer-events: none; z-index: 200;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 200;
   animation: screenShake 0.6s ease-in-out;
 }
+
 @keyframes screenShake {
-  0%,100% { transform: translate(0,0); }
-  10% { transform: translate(-6px, 3px); }
-  20% { transform: translate(6px, -3px); }
-  30% { transform: translate(-4px, 5px); }
-  40% { transform: translate(4px, -5px); }
-  50% { transform: translate(-3px, 2px); }
-  60% { transform: translate(3px, -2px); }
-  70% { transform: translate(-2px, 4px); }
-  80% { transform: translate(2px, -4px); }
-  90% { transform: translate(-1px, 1px); }
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  10% {
+    transform: translate(-6px, 3px);
+  }
+
+  20% {
+    transform: translate(6px, -3px);
+  }
+
+  30% {
+    transform: translate(-4px, 5px);
+  }
+
+  40% {
+    transform: translate(4px, -5px);
+  }
+
+  50% {
+    transform: translate(-3px, 2px);
+  }
+
+  60% {
+    transform: translate(3px, -2px);
+  }
+
+  70% {
+    transform: translate(-2px, 4px);
+  }
+
+  80% {
+    transform: translate(2px, -4px);
+  }
+
+  90% {
+    transform: translate(-1px, 1px);
+  }
 }
 
 /* === 聚光灯 === */
 .spotlight-overlay {
-  position: fixed; inset: 0; pointer-events: none; z-index: 88;
-  background: radial-gradient(ellipse at center, transparent 20%, rgba(0,0,0,0.7) 70%);
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 88;
+  background: radial-gradient(ellipse at center, transparent 20%, rgba(0, 0, 0, 0.7) 70%);
   animation: spotlightIn 0.5s ease-out;
 }
+
 @keyframes spotlightIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* === 碎裂特效 === */
 .shatter-overlay {
-  position: fixed; inset: 0; pointer-events: none; z-index: 150;
-  display: flex; align-items: center; justify-content: center;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   animation: shatterFlash 1.2s ease-out forwards;
 }
+
 @keyframes shatterFlash {
-  0% { opacity: 1; }
-  30% { opacity: 1; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 1;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
+
 .shard {
-  position: absolute; width: 30px; height: 60px;
-  background: linear-gradient(135deg, rgba(0,240,255,0.3), rgba(255,255,255,0.1));
-  border: 1px solid rgba(0,240,255,0.4);
+  position: absolute;
+  width: 30px;
+  height: 60px;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(255, 255, 255, 0.1));
+  border: 1px solid rgba(0, 240, 255, 0.4);
   animation: shardFly 1s ease-out forwards;
 }
+
 @keyframes shardFly {
-  0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
-  100% { transform: translateY(-200px) rotate(720deg) scale(0); opacity: 0; }
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-200px) rotate(720deg) scale(0);
+    opacity: 0;
+  }
 }
 
 /* === 金光粒子 === */
 .gold-particles-layer {
-  position: fixed; inset: 0; pointer-events: none; z-index: 150;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 150;
   overflow: hidden;
 }
+
 .gold-particle {
-  position: absolute; border-radius: 50%;
+  position: absolute;
+  border-radius: 50%;
   background: radial-gradient(circle, #ffd700, #ff8c00);
-  box-shadow: 0 0 6px rgba(255,215,0,0.6);
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
   animation: particleFloat 2s ease-out forwards;
 }
+
 @keyframes particleFloat {
-  0% { transform: translateY(0) scale(1); opacity: 1; }
-  100% { transform: translateY(-120px) scale(0); opacity: 0; }
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-120px) scale(0);
+    opacity: 0;
+  }
 }
 
 /* === Deal 按钮 === */
 .deal-btn {
   background: linear-gradient(135deg, #059669, #10b981);
-  border: 2px solid rgba(16,185,129,0.5);
-  box-shadow: 0 0 20px rgba(16,185,129,0.3);
+  border: 2px solid rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
   transition: all 0.3s;
-  position: relative; overflow: hidden;
+  position: relative;
+  overflow: hidden;
 }
+
 .deal-btn:hover {
-  box-shadow: 0 0 30px rgba(16,185,129,0.5), 0 0 60px rgba(16,185,129,0.2);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.5), 0 0 60px rgba(16, 185, 129, 0.2);
   transform: scale(1.05);
 }
+
 .deal-btn-glow {
   animation: btnGlow 2s ease-in-out infinite;
 }
+
 @keyframes btnGlow {
-  0%,100% { text-shadow: 0 0 8px rgba(255,255,255,0.3); }
-  50% { text-shadow: 0 0 16px rgba(255,255,255,0.6), 0 0 30px rgba(16,185,129,0.4); }
+
+  0%,
+  100% {
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+  }
+
+  50% {
+    text-shadow: 0 0 16px rgba(255, 255, 255, 0.6), 0 0 30px rgba(16, 185, 129, 0.4);
+  }
 }
 
 /* === NoDeal 按钮 === */
 .nodeal-btn {
   background: linear-gradient(135deg, #dc2626, #991b1b);
-  border: 2px solid rgba(220,38,38,0.5);
-  box-shadow: 0 0 15px rgba(220,38,38,0.3);
+  border: 2px solid rgba(220, 38, 38, 0.5);
+  box-shadow: 0 0 15px rgba(220, 38, 38, 0.3);
   animation: nodealPulse 1.2s ease-in-out infinite;
   transition: all 0.2s;
 }
-.nodeal-btn:hover { transform: scale(0.97); }
-@keyframes nodealPulse {
-  0%,100% { box-shadow: 0 0 15px rgba(220,38,38,0.3); }
-  50% { box-shadow: 0 0 25px rgba(220,38,38,0.6), 0 0 40px rgba(220,38,38,0.2); }
+
+.nodeal-btn:hover {
+  transform: scale(0.97);
 }
+
+@keyframes nodealPulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(220, 38, 38, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 25px rgba(220, 38, 38, 0.6), 0 0 40px rgba(220, 38, 38, 0.2);
+  }
+}
+
 .nodeal-progress {
-  position: absolute; bottom: 0; left: 0; height: 3px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
   background: linear-gradient(90deg, #ff4444, #ffd700);
   transition: width 0.05s linear;
-}
-.chest-longpress-progress {
-  position: absolute; bottom: 0; left: 0; height: 4px;
-  background: linear-gradient(90deg, #00f0ff, #ffd700);
-  transition: width 0.05s linear;
-  z-index: 20;
 }
 
 /* === 双倍对赌按钮 === */
 .double-btn {
   background: linear-gradient(135deg, #7c3aed, #dc2626);
-  border: 2px solid rgba(124,58,237,0.5);
-  box-shadow: 0 0 15px rgba(124,58,237,0.3);
+  border: 2px solid rgba(124, 58, 237, 0.5);
+  box-shadow: 0 0 15px rgba(124, 58, 237, 0.3);
   animation: doublePulse 1.5s ease-in-out infinite;
 }
+
 @keyframes doublePulse {
-  0%,100% { box-shadow: 0 0 15px rgba(124,58,237,0.3); }
-  50% { box-shadow: 0 0 30px rgba(124,58,237,0.6), 0 0 50px rgba(220,38,38,0.2); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(124, 58, 237, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 30px rgba(124, 58, 237, 0.6), 0 0 50px rgba(220, 38, 38, 0.2);
+  }
 }
 
 /* === 报价砸入动画 === */
 .offer-amount-smash {
   animation: amountSmash 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
 @keyframes amountSmash {
-  0% { transform: scale(3) translateY(-20px); opacity: 0; }
-  60% { transform: scale(0.9) translateY(5px); opacity: 1; }
-  80% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(3) translateY(-20px);
+    opacity: 0;
+  }
+
+  60% {
+    transform: scale(0.9) translateY(5px);
+    opacity: 1;
+  }
+
+  80% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* === 结算动画 === */
 .result-icon-anim {
   animation: resultIconBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
 @keyframes resultIconBounce {
-  0% { transform: scale(0); }
-  60% { transform: scale(1.3); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(0);
+  }
+
+  60% {
+    transform: scale(1.3);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
+
 .result-amount-reveal {
   animation: amountReveal 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s both;
 }
+
 @keyframes amountReveal {
-  0% { transform: scale(0.3) translateY(20px); opacity: 0; }
-  70% { transform: scale(1.1) translateY(-5px); opacity: 1; }
-  100% { transform: scale(1) translateY(0); opacity: 1; }
+  0% {
+    transform: scale(0.3) translateY(20px);
+    opacity: 0;
+  }
+
+  70% {
+    transform: scale(1.1) translateY(-5px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
 }
 
 /* === 银行家气泡情绪颜色 === */
 .banker-bubble.mood-angry {
-  border-color: rgba(255,50,50,0.4);
-  background: rgba(255,50,50,0.08);
+  border-color: rgba(255, 50, 50, 0.4);
+  background: rgba(255, 50, 50, 0.08);
 }
+
 .banker-bubble.mood-panic {
-  border-color: rgba(255,165,0,0.4);
-  background: rgba(255,165,0,0.08);
+  border-color: rgba(255, 165, 0, 0.4);
+  background: rgba(255, 165, 0, 0.08);
   animation: bubbleIn 0.3s ease-out, panicPulse 0.8s ease-in-out infinite;
 }
+
 @keyframes panicPulse {
-  0%,100% { box-shadow: none; }
-  50% { box-shadow: 0 0 15px rgba(255,165,0,0.3); }
+
+  0%,
+  100% {
+    box-shadow: none;
+  }
+
+  50% {
+    box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
+  }
 }
 
 /* === 打字机光标 === */
@@ -4880,119 +5674,205 @@ onUnmounted(() => {
   animation: blink 0.7s step-end infinite;
   display: inline-block;
 }
+
 @keyframes blink {
-  50% { border-color: transparent; }
+  50% {
+    border-color: transparent;
+  }
 }
 
 /* === 结算终端 === */
 .result-terminal {
-  border: 1px solid rgba(0,240,255,0.2);
-  box-shadow: 0 0 60px rgba(0,240,255,0.08), inset 0 0 40px rgba(0,0,0,0.5);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 60px rgba(0, 240, 255, 0.08), inset 0 0 40px rgba(0, 0, 0, 0.5);
 }
 
 /* 过渡动画 */
 .result-transition {
-  position: absolute; inset: 0; z-index: 10;
-  display: flex; flex-direction: column; overflow: hidden;
-  border-radius: 1rem; pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 1rem;
+  pointer-events: none;
 }
+
 .transition-blind {
-  flex: 1; background: linear-gradient(180deg, #1a1a2e, #0d1117);
+  flex: 1;
+  background: linear-gradient(180deg, #1a1a2e, #0d1117);
   animation: blindDown 0.5s ease-out forwards;
   transform-origin: top;
 }
+
 @keyframes blindDown {
-  from { transform: scaleY(0); }
-  to { transform: scaleY(1); }
+  from {
+    transform: scaleY(0);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
 }
 
 /* 老虎机数字 */
 .slot-machine {
-  position: relative; display: inline-block;
-  padding: 8px 24px; border-radius: 12px;
-  background: rgba(0,0,0,0.4);
-  border: 2px solid rgba(255,215,0,0.2);
+  position: relative;
+  display: inline-block;
+  padding: 8px 24px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(255, 215, 0, 0.2);
   overflow: hidden;
 }
+
 .slot-number {
   font-family: 'Courier New', monospace;
   letter-spacing: 2px;
   animation: slotFlicker 0.08s ease-in-out 8;
 }
+
 @keyframes slotFlicker {
-  0%,100% { opacity: 1; }
-  50% { opacity: 0.6; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
 }
+
 .text-gold {
   color: #ffd700;
-  text-shadow: 0 0 20px rgba(255,215,0,0.6), 0 0 40px rgba(255,215,0,0.3), 0 2px 4px rgba(0,0,0,0.8);
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.8);
 }
+
 .text-cyan {
   color: #00f0ff;
-  text-shadow: 0 0 12px rgba(0,240,255,0.4), 0 2px 4px rgba(0,0,0,0.8);
+  text-shadow: 0 0 12px rgba(0, 240, 255, 0.4), 0 2px 4px rgba(0, 0, 0, 0.8);
 }
-.text-gray { color: #94a3b8; }
+
+.text-gray {
+  color: #94a3b8;
+}
 
 /* 大奖光环 */
 .win-glow-ring {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 200px; height: 200px; border-radius: 50%;
-  border: 3px solid rgba(255,215,0,0.3);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 215, 0, 0.3);
   animation: glowRing 2s ease-out infinite;
   pointer-events: none;
 }
+
 @keyframes glowRing {
-  0% { width: 80px; height: 80px; opacity: 1; border-color: rgba(255,215,0,0.6); }
-  100% { width: 250px; height: 250px; opacity: 0; border-color: rgba(255,215,0,0); }
+  0% {
+    width: 80px;
+    height: 80px;
+    opacity: 1;
+    border-color: rgba(255, 215, 0, 0.6);
+  }
+
+  100% {
+    width: 250px;
+    height: 250px;
+    opacity: 0;
+    border-color: rgba(255, 215, 0, 0);
+  }
 }
 
 /* 银行家赛后点评 */
 .banker-post {
-  border: 1px solid rgba(255,215,0,0.15);
-  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255, 215, 0, 0.15);
+  background: rgba(0, 0, 0, 0.3);
   animation: postSlideIn 0.5s ease-out 0.6s both;
 }
+
 @keyframes postSlideIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 .banker-post-respect {
-  border-color: rgba(255,215,0,0.3);
-  background: rgba(255,215,0,0.05);
+  border-color: rgba(255, 215, 0, 0.3);
+  background: rgba(255, 215, 0, 0.05);
 }
+
 .banker-post-mock {
-  border-color: rgba(255,50,50,0.3);
-  background: rgba(255,50,50,0.05);
+  border-color: rgba(255, 50, 50, 0.3);
+  background: rgba(255, 50, 50, 0.05);
 }
 
 /* 快速重开按钮 */
 .quick-replay-btn {
   background: linear-gradient(135deg, #059669, #10b981, #059669);
   background-size: 200% 200%;
-  border: 2px solid rgba(16,185,129,0.5);
-  box-shadow: 0 0 20px rgba(16,185,129,0.3);
+  border: 2px solid rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
   animation: replayGlow 2s ease-in-out infinite, replayShimmer 3s linear infinite;
   transition: all 0.2s;
 }
+
 .quick-replay-btn:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(16,185,129,0.5), 0 0 60px rgba(16,185,129,0.2);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.5), 0 0 60px rgba(16, 185, 129, 0.2);
 }
+
 @keyframes replayGlow {
-  0%,100% { box-shadow: 0 0 20px rgba(16,185,129,0.3); }
-  50% { box-shadow: 0 0 30px rgba(16,185,129,0.5), 0 0 50px rgba(16,185,129,0.2); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.5), 0 0 50px rgba(16, 185, 129, 0.2);
+  }
 }
+
 @keyframes replayShimmer {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
+
 .quick-replay-pulse {
   animation: replayGlow 1.2s ease-in-out infinite, replayShimmer 2s linear infinite, replayPulse 0.8s ease-in-out infinite;
 }
+
 @keyframes replayPulse {
-  0%,100% { transform: scale(1); }
-  50% { transform: scale(1.04); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.04);
+  }
 }
 
 /* === 伪大奖闪光 === */
@@ -5001,51 +5881,82 @@ onUnmounted(() => {
   inset: 0;
   pointer-events: none;
   z-index: 40;
-  background: radial-gradient(circle at center, rgba(255,215,0,0.35) 0%, transparent 65%);
+  background: radial-gradient(circle at center, rgba(255, 215, 0, 0.35) 0%, transparent 65%);
   animation: pseudoBigWinFlash 2.5s ease-out forwards;
 }
+
 @keyframes pseudoBigWinFlash {
-  0% { opacity: 0; }
-  15% { opacity: 1; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 /* === Near Miss 揭晓 === */
 .near-miss-panel {
-  background: rgba(255,68,68,0.06);
-  border: 1px solid rgba(255,68,68,0.2);
+  background: rgba(255, 68, 68, 0.06);
+  border: 1px solid rgba(255, 68, 68, 0.2);
   transition: all 0.3s;
 }
+
 .near-miss-complete {
-  background: rgba(255,68,68,0.12);
-  border-color: rgba(255,215,0,0.4);
-  box-shadow: 0 0 20px rgba(255,68,68,0.15);
+  background: rgba(255, 68, 68, 0.12);
+  border-color: rgba(255, 215, 0, 0.4);
+  box-shadow: 0 0 20px rgba(255, 68, 68, 0.15);
 }
 
 /* === 挑衅成就 === */
 .provocation-badge {
   animation: provocationShake 0.6s ease-out;
 }
+
 @keyframes provocationShake {
-  0%,100% { transform: translateX(0); }
-  20% { transform: translateX(-4px); }
-  40% { transform: translateX(4px); }
-  60% { transform: translateX(-3px); }
-  80% { transform: translateX(3px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-4px);
+  }
+
+  40% {
+    transform: translateX(4px);
+  }
+
+  60% {
+    transform: translateX(-3px);
+  }
+
+  80% {
+    transform: translateX(3px);
+  }
 }
 
 /* === 战报海报 === */
 .battle-report-card {
-  background: rgba(10,10,20,0.95);
-  border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 0 40px rgba(0,240,255,0.15);
+  background: rgba(10, 10, 20, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 40px rgba(0, 240, 255, 0.15);
 }
-.battle-report-inner { border-radius: 12px; overflow: hidden; }
+
+.battle-report-inner {
+  border-radius: 12px;
+  overflow: hidden;
+}
 
 /* === 黑市商店 === */
 .bm-icon-btn {
-  background: rgba(139,92,246,0.15);
-  border: 1px solid rgba(139,92,246,0.3);
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.3);
   color: #a78bfa;
   font-size: 1.2rem;
   padding: 4px 10px;
@@ -5054,134 +5965,223 @@ onUnmounted(() => {
   transition: all 0.3s;
   animation: bmIconBreathe 3s ease-in-out infinite;
 }
+
 .bm-icon-btn:hover {
-  background: rgba(139,92,246,0.3);
+  background: rgba(139, 92, 246, 0.3);
   transform: scale(1.1);
-  box-shadow: 0 0 15px rgba(139,92,246,0.4);
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
 }
+
 .bm-pulse {
   animation: bmPulseGlow 1.5s ease-in-out infinite !important;
 }
+
 @keyframes bmIconBreathe {
-  0%,100% { box-shadow: 0 0 5px rgba(139,92,246,0.2); }
-  50% { box-shadow: 0 0 12px rgba(139,92,246,0.4); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(139, 92, 246, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
+  }
 }
+
 @keyframes bmPulseGlow {
-  0%,100% { box-shadow: 0 0 5px rgba(255,68,68,0.3); transform: scale(1); }
-  50% { box-shadow: 0 0 20px rgba(255,68,68,0.5); transform: scale(1.1); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(255, 68, 68, 0.3);
+    transform: scale(1);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(255, 68, 68, 0.5);
+    transform: scale(1.1);
+  }
 }
+
 .bm-shop {
-  border: 1px solid rgba(139,92,246,0.3);
-  box-shadow: 0 0 40px rgba(139,92,246,0.15), inset 0 0 60px rgba(0,0,0,0.5);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.15), inset 0 0 60px rgba(0, 0, 0, 0.5);
 }
+
 .bm-card {
-  background: linear-gradient(135deg, rgba(30,30,50,0.9), rgba(20,20,40,0.9));
-  border: 1px solid rgba(139,92,246,0.2);
+  background: linear-gradient(135deg, rgba(30, 30, 50, 0.9), rgba(20, 20, 40, 0.9));
+  border: 1px solid rgba(139, 92, 246, 0.2);
   border-radius: 12px;
   padding: 12px;
   transition: all 0.3s;
   position: relative;
   overflow: hidden;
 }
+
 .bm-card::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(45deg, transparent 40%, rgba(255,215,0,0.03) 50%, transparent 60%);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 40%, rgba(255, 215, 0, 0.03) 50%, transparent 60%);
   background-size: 200% 200%;
   animation: bmCardShimmer 4s ease-in-out infinite;
 }
+
 .bm-card:hover {
-  border-color: rgba(255,215,0,0.3);
-  box-shadow: 0 0 20px rgba(139,92,246,0.2);
+  border-color: rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
 }
+
 .bm-card-disabled {
   opacity: 0.5;
   pointer-events: none;
 }
+
 @keyframes bmCardShimmer {
-  0% { background-position: 200% 200%; }
-  50% { background-position: 0% 0%; }
-  100% { background-position: 200% 200%; }
+  0% {
+    background-position: 200% 200%;
+  }
+
+  50% {
+    background-position: 0% 0%;
+  }
+
+  100% {
+    background-position: 200% 200%;
+  }
 }
+
 .bm-buy-btn {
   background: linear-gradient(135deg, #6d28d9, #4c1d95);
-  border: 1px solid rgba(139,92,246,0.4);
+  border: 1px solid rgba(139, 92, 246, 0.4);
   cursor: pointer;
   transition: all 0.2s;
   position: relative;
   overflow: hidden;
 }
+
 .bm-buy-btn:hover:not(:disabled) {
   background: linear-gradient(135deg, #7c3aed, #5b21b6);
-  box-shadow: 0 0 15px rgba(139,92,246,0.4);
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
   transform: translateY(-1px);
 }
+
 .bm-buy-btn:active:not(:disabled) {
   transform: translateY(2px);
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
 }
+
 .bm-buy-btn:disabled {
-  background: rgba(50,50,70,0.5);
-  border-color: rgba(100,100,120,0.3);
+  background: rgba(50, 50, 70, 0.5);
+  border-color: rgba(100, 100, 120, 0.3);
   cursor: not-allowed;
   opacity: 0.6;
 }
 
 /* === 直觉值仪表盘 === */
 .intuition-meter {
-  background: rgba(0,0,0,0.3);
-  border: 1px solid rgba(255,215,0,0.1);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 215, 0, 0.1);
   transition: all 0.4s;
 }
+
 .intuition-flash {
   animation: intuitionPulse 0.6s ease-out;
 }
+
 .intuition-bar {
-  box-shadow: 0 0 6px rgba(255,215,0,0.3);
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.3);
 }
+
 @keyframes intuitionPulse {
-  0% { box-shadow: 0 0 0 0 rgba(255,215,0,0); }
-  50% { box-shadow: 0 0 20px 5px rgba(255,215,0,0.4); }
-  100% { box-shadow: 0 0 0 0 rgba(255,215,0,0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+  }
+
+  50% {
+    box-shadow: 0 0 20px 5px rgba(255, 215, 0, 0.4);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+  }
 }
 
 /* === 暖色滤镜（全场庆祝） === */
 .warm-filter {
   animation: warmGlow 2s ease-out;
 }
+
 @keyframes warmGlow {
-  0% { filter: brightness(1) sepia(0); }
-  30% { filter: brightness(1.15) sepia(0.2); }
-  100% { filter: brightness(1) sepia(0); }
+  0% {
+    filter: brightness(1) sepia(0);
+  }
+
+  30% {
+    filter: brightness(1.15) sepia(0.2);
+  }
+
+  100% {
+    filter: brightness(1) sepia(0);
+  }
 }
 
 /* === 希望破碎效果 === */
 .hope-flash {
   animation: hopeShatter 0.8s ease-out;
 }
+
 @keyframes hopeShatter {
-  0% { filter: brightness(1); }
-  10% { filter: brightness(0.6) saturate(0.3); }
-  40% { filter: brightness(1.1) hue-rotate(-20deg); }
-  100% { filter: brightness(1); }
+  0% {
+    filter: brightness(1);
+  }
+
+  10% {
+    filter: brightness(0.6) saturate(0.3);
+  }
+
+  40% {
+    filter: brightness(1.1) hue-rotate(-20deg);
+  }
+
+  100% {
+    filter: brightness(1);
+  }
 }
 
 /* === 红色警戒效果 === */
 .red-alert {
   animation: alertPulse 2s ease-in-out infinite;
 }
+
 @keyframes alertPulse {
-  0%, 100% { filter: brightness(1); }
-  50% { filter: brightness(1.05) saturate(1.1); }
+
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+
+  50% {
+    filter: brightness(1.05) saturate(1.1);
+  }
 }
 
 .red-alert-level-3 {
   animation: criticalPulse 1s ease-in-out infinite;
 }
+
 @keyframes criticalPulse {
-  0%, 100% { filter: brightness(1); }
-  50% { filter: brightness(1.1) saturate(1.3) hue-rotate(-5deg); }
+
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+
+  50% {
+    filter: brightness(1.1) saturate(1.3) hue-rotate(-5deg);
+  }
 }
 
 .red-alert-overlay {
@@ -5198,24 +6198,31 @@ onUnmounted(() => {
 
 .red-alert-overlay.level-1 {
   opacity: 0.05;
-  background: radial-gradient(ellipse at center, transparent 40%, rgba(255,0,0,0.1) 100%);
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(255, 0, 0, 0.1) 100%);
 }
 
 .red-alert-overlay.level-2 {
   opacity: 0.1;
-  background: radial-gradient(ellipse at center, transparent 30%, rgba(255,0,0,0.2) 100%);
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(255, 0, 0, 0.2) 100%);
   animation: alertBorder 2s ease-in-out infinite;
 }
 
 .red-alert-overlay.level-3 {
   opacity: 0.15;
-  background: radial-gradient(ellipse at center, transparent 20%, rgba(255,0,0,0.3) 100%);
+  background: radial-gradient(ellipse at center, transparent 20%, rgba(255, 0, 0, 0.3) 100%);
   animation: alertBorder 1s ease-in-out infinite;
 }
 
 @keyframes alertBorder {
-  0%, 100% { box-shadow: inset 0 0 30px rgba(255,0,0,0.2); }
-  50% { box-shadow: inset 0 0 50px rgba(255,0,0,0.4); }
+
+  0%,
+  100% {
+    box-shadow: inset 0 0 30px rgba(255, 0, 0, 0.2);
+  }
+
+  50% {
+    box-shadow: inset 0 0 50px rgba(255, 0, 0, 0.4);
+  }
 }
 
 /* === 债务警告 === */
@@ -5227,8 +6234,8 @@ onUnmounted(() => {
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: rgba(255,0,0,0.15);
-  border: 1px solid rgba(255,0,0,0.4);
+  background: rgba(255, 0, 0, 0.15);
+  border: 1px solid rgba(255, 0, 0, 0.4);
   border-radius: 20px;
   animation: debtPulse 1.5s ease-in-out infinite;
   z-index: 100;
@@ -5249,28 +6256,52 @@ onUnmounted(() => {
   color: #ffa500;
   font-size: 12px;
   padding: 2px 6px;
-  background: rgba(255,165,0,0.2);
+  background: rgba(255, 165, 0, 0.2);
   border-radius: 10px;
 }
 
 @keyframes debtPulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.02); opacity: 0.9; }
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.02);
+    opacity: 0.9;
+  }
 }
 
 @keyframes iconBounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
 }
 
 /* === 盒子“幸运”发光 === */
 .chest-img-lucky {
   animation: luckyBreathe 2s ease-in-out infinite;
-  filter: drop-shadow(0 0 8px rgba(255,215,0,0.4));
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.4));
 }
+
 @keyframes luckyBreathe {
-  0%,100% { filter: drop-shadow(0 0 4px rgba(255,215,0,0.2)); }
-  50% { filter: drop-shadow(0 0 12px rgba(255,215,0,0.5)); }
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.2));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.5));
+  }
 }
 
 /* === 透视标记 === */
@@ -5282,38 +6313,63 @@ onUnmounted(() => {
   z-index: 10;
   animation: peekFloat 2s ease-in-out infinite;
 }
+
 @keyframes peekFloat {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
 }
 
 /* === 平行宇宙对比 === */
 .parallel-universe {
-  background: linear-gradient(135deg, rgba(30,10,10,0.6), rgba(10,10,30,0.6));
-  border: 1px solid rgba(255,215,0,0.2);
+  background: linear-gradient(135deg, rgba(30, 10, 10, 0.6), rgba(10, 10, 30, 0.6));
+  border: 1px solid rgba(255, 215, 0, 0.2);
   animation: parallelReveal 0.8s ease-out;
 }
+
 @keyframes parallelReveal {
-  0% { opacity: 0; transform: scale(0.9); }
-  100% { opacity: 1; transform: scale(1); }
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* === 复仇按钮 === */
 .revenge-btn {
   background: linear-gradient(135deg, #dc2626, #991b1b);
-  border: 2px solid rgba(255,68,68,0.5);
+  border: 2px solid rgba(255, 68, 68, 0.5);
   animation: revengePulse 1.5s ease-in-out infinite;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 0 15px rgba(255,68,68,0.3);
+  box-shadow: 0 0 15px rgba(255, 68, 68, 0.3);
 }
+
 .revenge-btn:hover {
   background: linear-gradient(135deg, #ef4444, #b91c1c);
   transform: scale(1.05);
-  box-shadow: 0 0 25px rgba(255,68,68,0.5);
+  box-shadow: 0 0 25px rgba(255, 68, 68, 0.5);
 }
+
 @keyframes revengePulse {
-  0%,100% { box-shadow: 0 0 10px rgba(255,68,68,0.2); }
-  50% { box-shadow: 0 0 25px rgba(255,68,68,0.5), 0 0 40px rgba(255,68,68,0.2); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 25px rgba(255, 68, 68, 0.5), 0 0 40px rgba(255, 68, 68, 0.2);
+  }
 }
 </style>

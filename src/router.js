@@ -57,6 +57,7 @@ import SnakeIoGame from './views/SnakeIoGame.vue'
 import PhysicsLineGame from './views/PhysicsLineGame.vue'
 import SolitaireGame from './views/SolitaireGame.vue'
 import DealOrNoDealGame from './views/DealOrNoDealGame.vue'
+import GreedGambleGame from './views/GreedGambleGame.vue'
 
 export const routes = [
   { path: '/', redirect: '/minesweeper' },
@@ -124,6 +125,7 @@ export const routes = [
   { path: '/snake-io', name: 'snake-io', component: SnakeIoGame, meta: { title: '贪吃蛇大作战', icon: '🐍', group: 'game-casual' } },
   { path: '/physics-line', name: 'physics-line', component: PhysicsLineGame, meta: { title: '物理画线', icon: '✏️', group: 'game-casual' } },
   { path: '/deal-or-no-deal', name: 'deal-or-no-deal', component: DealOrNoDealGame, meta: { title: '一掷千金', icon: '💰', group: 'game-casual' } },
+  { path: '/greed-gamble', name: 'greed-gamble', component: GreedGambleGame, meta: { title: '贪婪的筹码', icon: '🎰', group: 'game-casual' } },
 ]
 
 export const toolGroups = {
