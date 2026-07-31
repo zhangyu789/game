@@ -1,14 +1,13 @@
 import { ref, watch } from 'vue'
-import { usePreferredDark, useStorage } from '@vueuse/core'
 
 export function useDarkMode() {
-  const prefersDark = usePreferredDark()
-  const stored = useStorage('devpocket-dark', null)
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)')
+  const stored = localStorage.getItem('gamebox-dark')
 
-  const isDark = ref(stored.value !== null ? stored.value === 'true' : prefersDark.value)
+  const isDark = ref(stored !== null ? stored === 'true' : prefersDark.matches)
 
   watch(isDark, (val) => {
-    stored.value = String(val)
+    localStorage.setItem('gamebox-dark', String(val))
     document.documentElement.classList.toggle('dark', val)
   }, { immediate: true })
 

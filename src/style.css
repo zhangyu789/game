@@ -24,27 +24,168 @@
 }
 
 @layer components {
+  /* === 电竞风游戏卡片 === */
   .tool-card {
-    @apply bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 p-6;
+    @apply relative rounded-xl p-6 overflow-hidden;
+    background: linear-gradient(145deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+    border: 1px solid rgba(0, 240, 255, 0.15);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.05), inset 0 0 30px rgba(0, 0, 0, 0.3);
   }
+  .dark .tool-card {
+    background: linear-gradient(145deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+    border-color: rgba(0, 240, 255, 0.2);
+  }
+
+  /* === 霓虹标题 === */
+  .tool-header {
+    @apply text-xl font-bold mb-4 relative inline-block;
+    color: #00f0ff;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5), 0 0 20px rgba(0, 240, 255, 0.3);
+    letter-spacing: 1px;
+  }
+  .tool-header::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #00f0ff, transparent);
+    box-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+  }
+
+  /* === 主按钮：霓虹渐变 === */
   .btn-primary {
-    @apply px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply px-4 py-2 text-white rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed;
+    background: linear-gradient(135deg, #00b4d8 0%, #0077b6 100%);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    box-shadow: 0 0 10px rgba(0, 180, 216, 0.3);
+    transition: all 0.25s ease;
+    text-shadow: 0 0 6px rgba(255,255,255,0.3);
   }
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #00f0ff 0%, #00b4d8 100%);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.5), 0 0 40px rgba(0, 240, 255, 0.2);
+    transform: translateY(-1px);
+  }
+  .btn-primary:active {
+    transform: translateY(1px);
+    box-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
+  }
+
+  /* === 次要按钮：暗色描边 === */
   .btn-secondary {
-    @apply px-4 py-2 bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-200 rounded-lg font-medium transition-colors duration-200;
+    @apply px-4 py-2 rounded-lg font-medium;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 240, 255, 0.15);
+    color: #94a3b8;
+    transition: all 0.25s ease;
   }
+  .btn-secondary:hover {
+    background: rgba(0, 240, 255, 0.08);
+    border-color: rgba(0, 240, 255, 0.4);
+    color: #00f0ff;
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.15);
+  }
+  .btn-secondary:active {
+    transform: scale(0.97);
+  }
+
   .btn-sm {
     @apply px-2.5 py-1.5 text-sm;
   }
+
+  /* === 输入框 === */
   .input-field {
-    @apply w-full px-3 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200;
+    @apply w-full px-3 py-2 rounded-lg;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 240, 255, 0.15);
+    color: #e2e8f0;
+    transition: all 0.25s ease;
   }
+  .input-field:focus {
+    outline: none;
+    border-color: rgba(0, 240, 255, 0.5);
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.15);
+  }
+  .input-field::placeholder { color: #475569; }
+
   .textarea-field {
     @apply input-field font-mono text-sm resize-y;
   }
-  .tool-header {
-    @apply text-xl font-bold text-gray-900 dark:text-white mb-4;
+
+  /* === Canvas 游戏画面 === */
+  .game-canvas {
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.1), inset 0 0 20px rgba(0, 0, 0, 0.5);
+    background: #0a0e17;
+    display: block;
+    max-width: 100%;
   }
+
+  /* === 得分面板 === */
+  .score-panel {
+    @apply flex gap-4 mb-3 text-sm font-mono;
+    color: #00f0ff;
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+  }
+  .score-panel span {
+    @apply px-3 py-1 rounded-lg;
+    background: rgba(0, 240, 255, 0.05);
+    border: 1px solid rgba(0, 240, 255, 0.1);
+  }
+
+  /* === 游戏徽章 === */
+  .game-badge {
+    @apply px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider;
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(255, 0, 229, 0.15));
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    color: #00f0ff;
+  }
+
+  /* === select 下拉美化 === */
+  .tool-card select {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 240, 255, 0.15);
+    color: #94a3b8;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+  }
+  .tool-card select:hover {
+    border-color: rgba(0, 240, 255, 0.4);
+  }
+  .tool-card select:focus {
+    outline: none;
+    border-color: rgba(0, 240, 255, 0.5);
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.15);
+  }
+
+  /* === 通用文字颜色覆盖 === */
+  .tool-card p, .tool-card span, .tool-card div {
+    color: #94a3b8;
+  }
+  .tool-card .text-gray-400, .tool-card .text-gray-500 {
+    color: #64748b !important;
+  }
+
+  /* === 霓虹脉冲动画 === */
+  @keyframes neon-pulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(0, 240, 255, 0.2); }
+    50% { box-shadow: 0 0 20px rgba(0, 240, 255, 0.4), 0 0 30px rgba(0, 240, 255, 0.1); }
+  }
+  @keyframes glow-border {
+    0%, 100% { border-color: rgba(0, 240, 255, 0.2); }
+    50% { border-color: rgba(0, 240, 255, 0.5); }
+  }
+  @keyframes float-up {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .neon-pulse { animation: neon-pulse 2s ease-in-out infinite; }
+  .glow-border { animation: glow-border 2s ease-in-out infinite; }
+
+  /* === Toast 动画 === */
   .toast-enter-active {
     animation: toast-in 0.3s ease-out;
   }
