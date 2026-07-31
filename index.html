@@ -3,12 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="format-detection" content="telephone=no" />
     <title>GameBox - 经典网页游戏合集</title>
     <meta name="description" content="纯前端经典单机游戏合集，即开即玩，数据安全" />
     <meta name="theme-color" content="#6366f1" />
-    <script type="module" crossorigin src="./assets/index-CYug9xMU.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-Dy3I80r2.css">
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        overscroll-behavior: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      #app {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index-D3-oDvcK.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-B844nrNC.css">
   <link rel="manifest" href="./manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
   <body class="bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100">
     <div id="app"></div>
