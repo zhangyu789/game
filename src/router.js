@@ -20,6 +20,7 @@ import GameOfLife from './views/GameOfLife.vue'
 import TypingGame from './views/TypingGame.vue'
 import TicTacToeGame from './views/TicTacToeGame.vue'
 import HuarongGame from './views/HuarongGame.vue'
+import PinballBounceGame from './views/PinballBounceGame.vue'
 
 export const routes = [
   { path: '/', redirect: '/minesweeper' },
@@ -41,6 +42,7 @@ export const routes = [
   { path: '/breakout', name: 'breakout', component: BreakoutGame, meta: { title: '打砖块', icon: '🧱', group: 'game-action' } },
   { path: '/tank', name: 'tank', component: TankGame, meta: { title: '坦克大战', icon: '🔫', group: 'game-action' } },
   { path: '/plane-war', name: 'plane-war', component: PlaneWarGame, meta: { title: '飞机大战', icon: '✈️', group: 'game-action' } },
+  { path: '/pinball-bounce', name: 'pinball-bounce', component: PinballBounceGame, meta: { title: '弹珠弹弹弹', icon: '🎱', group: 'game-action' } },
   // 🃏 卡牌策略
   { path: '/memory-card', name: 'memory-card', component: MemoryCardGame, meta: { title: '记忆翻牌', icon: '🃏', group: 'game-card' } },
   { path: '/spider-solitaire', name: 'spider-solitaire', component: SpiderSolitaireGame, meta: { title: '蜘蛛纸牌', icon: '🕷️', group: 'game-card' } },
